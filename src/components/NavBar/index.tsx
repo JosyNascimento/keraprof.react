@@ -24,14 +24,15 @@ const NavBar: React.FC = () => {
            
             }} 
           />
-          <Typography variant="h6" component="div">
-            KeraProf
-          </Typography>
-        </Box>
+           <Typography variant="h4" component="div" sx={{ marginRight: '20px', fontFamily: 'Roboto',  color: '#FFD700' }}>
+           KeraProf
+  </Typography>
+</Box>
 
-        <SearchBar /> {/* Barra de pesquisa */}
+        {/* Barra de pesquisa */}
+        <SearchBar />
 
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
           <MenuItem title="ALISAMENTO" subItems={['ESCOVA EM GEL', 'ESCOVA PROGRESSIVA','ESCOVA DEIFINITIVA', 'Escova Japonesa']} />
           <MenuItem title="LINHAS ESPECIAIS" subItems={['FORCE REPAIR', 'OLIVER OIL', 'SOS CAPILAR', 'DESMAIA CABELO']} />
           <MenuItem title="CUIDADOS PESSOAIS" subItems={['CABELO E BANHO']} />

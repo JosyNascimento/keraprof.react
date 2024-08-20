@@ -1,11 +1,12 @@
 import React from 'react';
 import NavBar from './components/NavBar';  // Importa a barra de navegação
 
-const App: React.FC = () => {
+const App: React.FC= () => {
+   {/* "React Functional Component aproveita várias funcionalidades e benefícios do TypeScript" */} 
   return (
     <div>
       <NavBar />  {/* Renderiza a barra de navegação */}
-      {/* Outros componentes do seu app podem ser adicionados aqui */}
+      {/* para adição de outros comomentes caso precise*/}
     </div>
   );
 };
