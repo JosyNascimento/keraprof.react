@@ -1,13 +1,19 @@
 import React from 'react';
-import NavBar from './components/NavBar';  // Importa a barra de navegação
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import NavBar from './components/NavBar';
+import HomePage from './components/pages/HomePage'; // Certifique-se de que este caminho está correto
 
-const App: React.FC= () => {
-   {/* "React Functional Component aproveita várias funcionalidades e benefícios do TypeScript" */} 
+const App: React.FC = () => {
   return (
-    <div>
-      <NavBar />  {/* Renderiza a barra de navegação */}
-      {/* para adição de outros comomentes caso precise*/}
-    </div>
+    <Router>
+      <div>
+        <NavBar /> {/* Navegação global */}
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          {/* Adicione outras rotas aqui se necessário */}
+        </Routes>
+      </div>
+    </Router>
   );
 };
 
