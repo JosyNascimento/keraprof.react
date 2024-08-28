@@ -4,92 +4,82 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import img1 from '../img/banner_promocional.jpg';
 import img2 from '../img/banner.jpg';
-import { Center } from '@chakra-ui/react';
+import qualidadeImg from '../img/qualidade.png';
+import caixaImg from '../img/caixa.png';
+import cartaoImg from '../img/cartão.png';
+import caminhaoImg from '../img/caminhão.png';
+import { Flex } from '@chakra-ui/react';
 
 const HomePage: React.FC = () => {
+  // Configurações do slider
   const settings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    autoplay: true,
-    autoplaySpeed: 3000,
+    dots: true, // Exibe os pontos de navegação
+    infinite: true, // Habilita rotação infinita dos slides
+    speed: 500, // Velocidade de transição dos slides
+    slidesToShow: 1, // Quantidade de slides visíveis por vez
+    slidesToScroll: 1, // Quantidade de slides que se movem por vez
+    autoplay: true, // Habilita a reprodução automática dos slides
+    autoplaySpeed: 3000, // Intervalo de tempo entre os slides em milissegundos
   };
 
   return (
     <div>
+      {/* Slider de Imagens */}
       <Slider {...settings}>
         <div>
-          <img src={img1} alt="Imagem 1" style={{ width: '100%', height: '60%'}} />
+          <img src={img1} alt="Imagem 1" style={{ width: '100%', height: '60%' }} />
         </div>
         <div>
           <img src={img2} alt="Imagem 2" style={{ width: '100%', height: '60%' }} />
         </div>
       </Slider>
 
- {/* adicionando novos elementos */}
- <div className="line-content">
-  <div className="container">
-    <div className="flex box-line justify-between align-center">
-      {/* Primeiro Bloco */}
-      <a className="box-content flex">
-        <div className="box-img">
-          <img src="src/components/img/caixa.png" alt="caixa para envio" />
+      {/* Adicionando novos elementos abaixo do slider */}
+      <div className="line-content px-2 sm:px-4 lg:px-6 mt-6">
+        <div className="container mx-auto">
+          <Flex gap="8" align="center"> {/* Disposição vertical com espaçamento */}
+            {/* Bloco de Conteúdo */}
+            {[{
+              img: caixaImg,
+              title: 'Os melhores produtos',
+              subtitle: 'Você encontra aqui!',
+            }, {
+              img: cartaoImg,
+              title: 'Parcelamento no Cartão',
+              subtitle: 'Pague em até 10x',
+            }, {
+              img: caminhaoImg,
+              title: 'Entrega rápida',
+              subtitle: 'Em todo o Brasil',
+            }, {
+              img: qualidadeImg,
+              title: 'Satisfação garantida',
+              subtitle: 'Ou seu dinheiro de volta',
+            }
+          ].map((item, index) => (
+              <div key={index} className="flex items-center" style={{ width: '100%', maxWidth: '1200px' }}>
+                <div className="box-img">
+                  <img
+                    src={item.img}
+                    alt={item.title}
+                    style={{ width: '48px', height: '48px',paddingLeft: '3rem', marginBottom: '0rem' }}
+                  />
+                </div>
+                <div className="box-text" style={{ paddingLeft: '1rem'}}>
+                  <div className="first text-uppercase text-lg font-bold">
+                    {item.title}
+                  </div>
+                  <div className="second text-gray-600">
+                    {item.subtitle}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </Flex>
         </div>
-        <div className="box-text">
-          <div className="first uppercase">Os melhores produtos</div>
-          <div className="second">Você encontra aqui!</div>
-        </div>
-      </a>
-
-      {/* Segundo Bloco */}
-      <a className="box-content flex">
-        <div className="box-img">
-          <img src="src/components/img/cartão.png" alt="formas de pagamento" />
-        </div>
-        <div className="box-text">
-          <div className="first uppercase">Pague em até 10x</div>
-          <div className="second">qualidade e preço</div>
-        </div>
-      </a>
-
-      {/* Terceiro Bloco */}
-      <a className="box-content flex">
-        <div className="box-img">
-          <img src="src/components/img/caminhão.png" alt="entrega" />
-        </div>
-        <div className="box-text">
-          <div className="first uppercase">Entrega rápida</div>
-          <div className="second">em todo o Brasil</div>
-        </div>
-      </a>
-
-      {/* Quarto Bloco */}
-      <a className="box-content flex">
-        <div className="box-img">
-          <img src="src/components/img/qualidade.png" alt="qualidade" />
-        </div>
-        <div className="box-text">
-          <div className="first uppercase">Satisfação garantida</div>
-          <div className="second">ou seu dinheiro de volta</div>
-        </div>
-      </a>
-    </div>
-  </div>
-</div>
-
-      {/* Aqui termina o conteúdo fornecido */}
-
-
-
-
-
+      </div>
     </div>
   );
 };
 
 export default HomePage;
-
-
-export {};

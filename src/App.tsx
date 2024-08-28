@@ -10,7 +10,8 @@ const App: React.FC = () => {
         <NavBar /> {/* Navegação global */}
         <Routes>
           <Route path="/" element={<HomePage />} />
-          {/* Adicione outras rotas aqui se necessário */}
+          
+          {/* Adicionar outras rotas aqui se necessário */}
         </Routes>
       </div>
     </Router>
