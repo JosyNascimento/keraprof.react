@@ -1,3 +1,4 @@
+// src/components/pages/HomePage.tsx
 import React from 'react';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
@@ -8,19 +9,27 @@ import qualidadeImg from '../img/qualidade.png';
 import caixaImg from '../img/caixa.png';
 import cartaoImg from '../img/cartão.png';
 import caminhaoImg from '../img/caminhão.png';
-import { Flex } from '@chakra-ui/react';
+import CardComponent from '../CardComponent';
+import { Box, Typography } from '@mui/material';
 
 const HomePage: React.FC = () => {
-  // Configurações do slider
   const settings = {
-    dots: true, // Exibe os pontos de navegação
-    infinite: true, // Habilita rotação infinita dos slides
-    speed: 500, // Velocidade de transição dos slides
-    slidesToShow: 1, // Quantidade de slides visíveis por vez
-    slidesToScroll: 1, // Quantidade de slides que se movem por vez
-    autoplay: true, // Habilita a reprodução automática dos slides
-    autoplaySpeed: 3000, // Intervalo de tempo entre os slides em milissegundos
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 3000,
   };
+
+  const products = [
+    { id: 1, title: 'PROGRESSIVA NANOPLÁSTIA 1L SEM FORMOL', subtitle: 'NANOPLÁSTIA PANTOVIN: Tem através de seu sistema integrado de aminoácidos que atuam na papila dérmica, ou seja, na zona de proliferação do folículo piloso, propiciando a reposição integral destes agentes na cutícula e no bulbo capilar e o resultado é uma regeneração, cauterização instantâneo dos fios. Previne o envelhecimento  e promove hidratação, revitalização e selagem da fibra capilar, tornando os fios mais lisos, sedosos, resistentes, brilhantes e macios.', imgSrc: img1 },
+    { id: 2, title: 'Produto 2', subtitle: 'Descrição do produto 2', imgSrc: img2 },
+    { id: 3, title: 'Produto 3', subtitle: 'Descrição do produto 3', imgSrc: img1 },
+    { id: 4, title: 'Produto 4', subtitle: 'Descrição do produto 4', imgSrc: img2 },
+    // Adicione mais produtos conforme necessário
+  ];
 
   return (
     <div>
@@ -34,50 +43,80 @@ const HomePage: React.FC = () => {
         </div>
       </Slider>
 
-      {/* Adicionando novos elementos abaixo do slider */}
-      <div className="line-content px-2 sm:px-4 lg:px-6 mt-6">
-        <div className="container mx-auto">
-          <Flex gap="8" align="center"> {/* Disposição vertical com espaçamento */}
-            {/* Bloco de Conteúdo */}
-            {[{
-              img: caixaImg,
-              title: 'Os melhores produtos',
-              subtitle: 'Você encontra aqui!',
-            }, {
-              img: cartaoImg,
-              title: 'Parcelamento no Cartão',
-              subtitle: 'Pague em até 10x',
-            }, {
-              img: caminhaoImg,
-              title: 'Entrega rápida',
-              subtitle: 'Em todo o Brasil',
-            }, {
-              img: qualidadeImg,
-              title: 'Satisfação garantida',
-              subtitle: 'Ou seu dinheiro de volta',
-            }
-          ].map((item, index) => (
-              <div key={index} className="flex items-center" style={{ width: '100%', maxWidth: '1200px' }}>
-                <div className="box-img">
-                  <img
-                    src={item.img}
-                    alt={item.title}
-                    style={{ width: '48px', height: '48px',paddingLeft: '3rem', marginBottom: '0rem' }}
-                  />
+      {/* Adicionando novos elementos */}
+      <div className="line-content">
+        <div className="container">
+          <Box display="flex" justifyContent="space-between" alignItems="center" flexWrap="wrap">
+            
+            {/* Primeiro Bloco */}
+            <a className="box-content flex" style={{ display: 'flex', alignItems: 'center', padding: '1rem 0' }}>
+              <div className="box-img" style={{ backgroundColor: 'white', padding: '0.5rem', borderRadius: '8px' }}>
+                <img src={caixaImg} alt="caixa para envio" style={{ width: '48px', margin: '1rem', height: '48px', }} />
+              </div>
+              <div className="box-text">
+                <div className="first text-uppercase text-lg font-bold">
+                  Os melhores produtos
                 </div>
-                <div className="box-text" style={{ paddingLeft: '1rem'}}>
-                  <div className="first text-uppercase text-lg font-bold">
-                    {item.title}
-                  </div>
-                  <div className="second text-gray-600">
-                    {item.subtitle}
-                  </div>
+                <div className="second text-gray-600">
+                  Você encontra aqui!
                 </div>
               </div>
-            ))}
-          </Flex>
+            </a>
+
+            {/* Segundo Bloco */}
+            <a className="box-content flex" style={{ display: 'flex', alignItems: 'center', padding: '1rem ' }}>
+              <div className="box-img">
+                <img src={cartaoImg} alt="formas de pagamento" style={{ width: '48px', margin: '1rem', height: '48px' }} />
+              </div>
+              <div className="box-text">
+                <div className="first uppercase">Parcele com cartão</div>
+                <div className="second">Pague em até 10x</div>
+              </div>
+            </a>
+
+            {/* Terceiro Bloco */}
+            <a className="box-content flex" style={{ display: 'flex', alignItems: 'center', padding: '1rem ' }}>
+              <div className="box-img">
+                <img src={caminhaoImg} alt="entrega" style={{ width: '48px', margin: '1rem', height: '48px' }} />
+              </div>
+              <div className="box-text" >
+                <div className="first uppercase">Entrega rápida</div>
+                <div className="second">em todo o Brasil</div>
+              </div>
+            </a>
+
+            {/* Quarto Bloco */}
+            <a className="box-content flex" style={{ display: 'flex', alignItems: 'center', padding: '1rem 0' }}>
+              <div className="box-img">
+                <img src={qualidadeImg} alt="qualidade" style={{ width: '48px', margin: '1rem', height: '48px' }} />
+              </div>
+              <div className="box-text" style={{ margin: '1rem ' }}>
+                <div className="first uppercase">Satisfação garantida</div>
+                <div className="second">ou seu dinheiro de volta</div>
+              </div>
+            </a>
+          </Box>
         </div>
       </div>
+
+      {/* Cards */}
+      <Box p={2}>
+        <Typography variant="h4" gutterBottom align="center">
+          Novidades selecionadas para você
+        </Typography>
+
+        <Box display="flex" flexWrap="wrap" justifyContent="center" gap={2}>
+          {products.map(product => (
+            <CardComponent
+              key={product.id}
+              id={product.id} // Passe o id para o CardComponent
+              title={product.title}
+              subtitle={product.subtitle}
+              imgSrc={product.imgSrc}
+            />
+          ))}
+        </Box>
+      </Box>
     </div>
   );
 };
