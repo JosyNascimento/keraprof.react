@@ -1,0 +1,45 @@
+/* src/components/Footer/Footer.css */
+
+/* Estilo geral do footer */
+footer {
+    background-color: #f8f9fa;
+    padding: 20px;
+    text-align: center;
+    width: 100%;
+  }
+  
+  /* Remove marcadores e estilos padrões das listas */
+  footer ul {
+    list-style-type: none; /* Remove marcadores */
+    padding: 0;            /* Remove padding padrão */
+    margin: 0; 
+    align-items: flex-start;            /* Remove margem padrão */
+  }
+  
+  /* Estilo para itens de lista */
+  footer li {
+    margin-bottom: 10px; /* Espaçamento entre os itens */
+  }
+  
+  /* Estilo para links no footer */
+  footer a {
+    text-decoration: none; /* Remove sublinhado dos links */
+    color: #333;           /* Cor do texto dos links */
+  }
+  
+  footer a:hover {
+    text-decoration: underline; /* Sublinhado no hover */
+  }
+  
+  /* Estilo para o container de email e botão */
+  footer .email-container {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+  }
+  
+  footer .email-container input {
+    flex-grow: 1;
+    margin-right: 10px;
+  }
+  

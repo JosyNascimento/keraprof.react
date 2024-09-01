@@ -1,10 +1,11 @@
-// src/components/CardComponent.tsx
+// src/components/Card/CardComponent.tsx
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Card as MuiCard, CardContent, CardMedia, Typography, Button } from '@mui/material';
 
 interface CardComponentProps {
-  id: number; 
+  id: number;
   title: string;
   subtitle: string;
   imgSrc: string;
@@ -13,10 +14,14 @@ interface CardComponentProps {
 
 const CardComponent: React.FC<CardComponentProps> = ({ id, title, subtitle, imgSrc, onDetailsClick }) => {
   return (
-    <MuiCard sx={{ maxWidth: 345, boxShadow: 3 }}>
+    <MuiCard sx={{ maxWidth: 345, boxShadow: 3, margin: 1 }}>
       <CardMedia
         component="img"
-        height="240"
+        sx={{ 
+          height: 290, // Ajuste a altura conforme necessário
+          width: '100%', // Ajuste a largura conforme necessário
+          objectFit: 'cover' // Ajuste o ajuste da imagem
+        }}
         image={imgSrc}
         alt={title}
       />
@@ -28,12 +33,13 @@ const CardComponent: React.FC<CardComponentProps> = ({ id, title, subtitle, imgS
       </CardContent>
       <Button
         component={Link}
-        to={`/product-details/${id}`} // Utilize o ID do produto na URL
+        to={`/product-details/${id}`}
         variant="contained"
-        color="primary"
-        onClick={onDetailsClick} // Adicione a função de clique se necessário
+        color="secondary"
+        onClick={onDetailsClick}
+        sx={{ display: 'block', margin: '0 auto', textAlign: 'center', backgroundColor: '#e91e63', '&:hover': { backgroundColor: '#c2185b' } }}
       >
-        Ver Detalhes
+        Ver Produto
       </Button>
     </MuiCard>
   );

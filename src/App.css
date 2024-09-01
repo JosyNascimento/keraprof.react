@@ -36,3 +36,8 @@
     transform: rotate(360deg);
   }
 }
+/* CSS global para esconder os botões padrão do Slick */
+.slick-prev,
+.slick-next {
+  display: none; 
+}

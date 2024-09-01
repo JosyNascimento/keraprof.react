@@ -1,0 +1,17 @@
+/* src/components/ProductCatalog/Catalog.css */
+
+/* Esconde as setas padrão do Slick */
+.slick-prev,
+.slick-next {
+  display: none; /* Oculta os botões de navegação padrão */
+}
+
+/* Ajusta o estilo dos pontos de navegação */
+.slick-dots {
+  bottom: -30px; /* Ajuste conforme necessário */
+}
+
+/* Ajusta o padding entre os slides */
+.slick-slide > div {
+  padding: 0 10px; /* Espaço entre os slides */
+}

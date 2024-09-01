@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import { Box, Typography, Button, TextField } from '@mui/material';
 
 // Exemplo de dados do produto (substitua isso com a chamada à API)
+
 const dummyProductData: Record<string, any> = {
   1: {
     title: 'Produto 1',
