@@ -9,8 +9,17 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css'; 
 import './Catalog.css'; // Importe o CSS para garantir que as regras sejam aplicadas
 
+// Definindo o tipo Product
+interface Product {
+  id: number;
+  title: string;
+  description: string;
+  imageUrl: string;
+  price: string;
+}
+
 const Catalog: React.FC = () => {
-  const [products, setProducts] = useState<any[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -38,9 +47,9 @@ const Catalog: React.FC = () => {
     dots: true,
     infinite: true,
     speed: 500,
-    slidesToShow: 4, // Aumente o número de slides a serem exibidos
+    slidesToShow: 4,
     slidesToScroll: 1,
-    centerMode: false, // Não usar modo centralizado para exibir mais produtos
+    centerMode: false,
     responsive: [
       {
         breakpoint: 1024,
@@ -68,7 +77,11 @@ const Catalog: React.FC = () => {
 
   return (
     <Box p={1}>
-      <Typography variant="h4" gutterBottom align="center">
+      <Typography
+        variant="h3"
+        align="center"
+        sx={{ mt: 4, mb: 4 }} // Adiciona espaçamento superior e inferior
+      >
         Produtos selecionados para Você
       </Typography>
 
@@ -81,6 +94,7 @@ const Catalog: React.FC = () => {
                 title={product.title}
                 subtitle={product.description}
                 imgSrc={product.imageUrl}
+                price={product.price} // Passando o preço ao CardComponent
               />
             </div>
           ))}

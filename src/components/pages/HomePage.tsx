@@ -4,12 +4,12 @@ import React from 'react';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import img1 from '../img/banner_promocional.jpg';
-import img2 from '../img/banner.jpg';
-import qualidadeImg from '../img/qualidade.png';
-import caixaImg from '../img/caixa.png';
-import cartaoImg from '../img/cartão.png';
-import caminhaoImg from '../img/caminhão.png';
+import img1 from '../../assets/img/banner_promocional.jpg';
+import img2 from '../../assets/img/banner.jpg';
+import qualidadeImg from '../../assets/img/qualidade.png';
+import caixaImg from '../../assets/img/caixa.png';
+import cartaoImg from '../../assets/img/cartão.png';
+import caminhaoImg from '../../assets/img/caminhão.png';
 import { Box, Typography, Container, Grid } from '@mui/material';
 import Catalog from '../ProductCatalog/Catalog';
 import Footer from '../Footer/Footer'; // Importando o Footer

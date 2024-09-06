@@ -2,7 +2,7 @@ import React from 'react';
 import { AppBar, Toolbar, Typography, Box, IconButton, useMediaQuery, Drawer } from '@mui/material';
 import MenuItem from './MenuItem';
 import SearchBar from './SearchBar';
-import logo from '../img/logok.png';
+import logo from '../../assets/img/logok.png';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import MenuIcon from '@mui/icons-material/Menu';
 import '../style.css'; // Importe o arquivo CSS
