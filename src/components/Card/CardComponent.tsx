@@ -70,6 +70,7 @@ const CardComponent: React.FC<CardComponentProps> = ({ id, title, subtitle, imgS
           </Typography>
         </Box>
         <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+          
           <Button
             component={Link}
             to={`/product-details/${id}`}
