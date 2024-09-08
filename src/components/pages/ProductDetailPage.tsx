@@ -1,15 +1,35 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Box, Typography, Button, TextField, Grid } from '@mui/material';
+import { Box, Typography, Button, TextField, Grid, Card, CardContent, Collapse, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 import { fetchProductById } from '../../services/productService';
-import { useCart } from '../../context/CartContext'; // Supondo que você tenha um contexto de carrinho
+import { useCart } from '../../context/CartContext';
+
+// Função para calcular o frete com base no CEP
+const calculateFreight = (cep: string) => {
+  // Tabela de frete simplificada com base no estado
+  const freightRates: { [key: string]: number } = {
+    'SP': 15.00,
+    'RJ': 20.00,
+    'MG': 25.00,
+    'ES': 18.00,
+    'outros': 30.00 // taxa padrão para outros estados
+  };
+
+  // Extrair o estado do CEP (assumindo que o CEP é no formato "XXXXX-XXX")
+  const state = cep.slice(0, 2);
+
+  // Retornar a taxa de frete com base no estado
+  return freightRates[state] || freightRates['outros'];
+};
 
 const ProductDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [product, setProduct] = useState<any>(null);
   const [quantity, setQuantity] = useState(1);
   const [cep, setCep] = useState('');
-  const { addToCart } = useCart(); // Função do contexto para adicionar ao carrinho
+  const [showPaymentTable, setShowPaymentTable] = useState(false);
+  const [freight, setFreight] = useState<number | null>(null);
+  const { addToCart } = useCart();
 
   useEffect(() => {
     const loadProduct = async () => {
@@ -27,87 +47,132 @@ const ProductDetailPage: React.FC = () => {
   const handleRemove = () => setQuantity(quantity > 1 ? quantity - 1 : 1);
   const handleCepChange = (e: React.ChangeEvent<HTMLInputElement>) => setCep(e.target.value);
   const handleCalculateFreight = () => {
-    alert(`Calculando frete para o CEP: ${cep}`);
+    const freightValue = calculateFreight(cep);
+    setFreight(freightValue);
   };
 
   const handleAddToCart = () => {
     if (product) {
-      addToCart({ ...product, quantity }); // Adiciona ao carrinho usando o contexto
+      addToCart({ ...product, quantity });
       alert(`Produto "${product.title}" adicionado ao carrinho com quantidade ${quantity}.`);
     }
   };
 
-  if (!product) return <Typography variant="h6">Produto não encontrado ou carregando...</Typography>;
+  const togglePaymentTable = () => setShowPaymentTable(prev => !prev);
+
+  if (!product) {
+    return <Typography variant="h6">Produto não encontrado ou carregando...</Typography>;
+  }
+
+  // Extrair o valor numérico do preço
+  const priceString = product.price.replace('R$', '').replace(',', '.').trim();
+  const price = parseFloat(priceString);
+
+  if (isNaN(price)) {
+    return <Typography variant="h6">Preço inválido para o produto.</Typography>;
+  }
+
+  const totalPrice = price * quantity;
+  const maxInstallments = 10;
 
   return (
-    <Box p={2}>
-      {/* Título e descrição */}
-      <Typography variant="h4" gutterBottom>
-        {product.title}
-      </Typography>
-      <Typography variant="body1" paragraph>
-        {product.description || 'Descrição do produto não disponível.'}
-      </Typography>
+    <Box p={3}>
+      <Grid container spacing={3}>
+        
+        {/* Thumb-gallery */}
+        <Grid item xs={12} sm={4}>
+          <Box display="flex" flexDirection="column" alignItems="center" gap={2}>
+            
+            {/* Exibindo quatro imagens do produto */}
+            {product.images?.slice(0, 4).map((image: string, index: number) => (
+              <Box key={index} mb={2}>
+                <img 
+                  src={image} 
+                  alt={`Imagem ${index + 1} do produto`} 
+                  style={{ width: '100%', height: 'auto', borderRadius: '8px' }} 
+                />
+              </Box>
+            ))}
+          </Box>
+        </Grid>
 
-      {/* Exibição de imagens do produto */}
-      <Grid container spacing={2} justifyContent="center">
-        {product.images?.map((image: string, index: number) => (
-          <Grid item key={index} xs={12} sm={6} md={4}>
-            <img 
-              src={image} 
-              alt={`Imagem ${index + 1} do produto`} 
-              style={{ width: '100%', height: 'auto', borderRadius: '8px' }} 
-            />
-          </Grid>
-        ))}
+        <Grid item xs={12} sm={8}>
+          <Card>
+            <CardContent>
+              <Typography variant="h5">{product.title}</Typography>
+              <Typography variant="body1" color="textSecondary" gutterBottom>
+                {product.description}
+              </Typography>
+              <Typography variant="h4" style={{ color: 'deeppink' }}>
+                Preço: R${price.toFixed(2)}
+              </Typography>
+
+              <Box mt={2}>
+                <Button variant="outlined" onClick={handleRemove}>-</Button>
+                <Typography variant="h6" component="span" mx={2}>{quantity}</Typography>
+                <Button variant="outlined" onClick={handleAdd}>+</Button>
+              </Box>
+
+              <Typography variant="h6" mt={2}>
+                Total: R${totalPrice.toFixed(2)}
+              </Typography>
+
+              <Box mt={2}>
+                <TextField
+                  label="CEP"
+                  value={cep}
+                  onChange={handleCepChange}
+                  variant="outlined"
+                  size="small"
+                />
+                <Button variant="contained" onClick={handleCalculateFreight}>Calcular Frete</Button>
+                {freight !== null && (
+                  <Typography variant="h6" mt={2}>Frete: R${freight.toFixed(2)}</Typography>
+                )}
+              </Box>
+
+              <Box mt={2}>
+                <Button variant="contained" color="primary" onClick={handleAddToCart}>
+                  Adicionar ao Carrinho
+                </Button>
+              </Box>
+
+              <Box mt={4}>
+                <Button variant="outlined" onClick={togglePaymentTable}>
+                  {showPaymentTable ? 'Ocultar Formas de Pagamento' : 'Ver Formas de Pagamento'}
+                </Button>
+                <Collapse in={showPaymentTable}>
+                  <Box mt={2}>
+                    <Typography variant="h6">Formas de Pagamento</Typography>
+                    <TableContainer component={Paper}>
+                      <Table>
+                        <TableHead>
+                          <TableRow>
+                            <TableCell>Parcelamento</TableCell>
+                            <TableCell>Valor da Parcela</TableCell>
+                          </TableRow>
+                        </TableHead>
+                        <TableBody>
+                          {[...Array(maxInstallments)].map((_, index) => {
+                            const parcelCount = index + 1;
+                            const parcelValue = (totalPrice / parcelCount).toFixed(2);
+                            return (
+                              <TableRow key={index}>
+                                <TableCell>{parcelCount}x sem juros</TableCell>
+                                <TableCell>R${parcelValue}</TableCell>
+                              </TableRow>
+                            );
+                          })}
+                        </TableBody>
+                      </Table>
+                    </TableContainer>
+                  </Box>
+                </Collapse>
+              </Box>
+            </CardContent>
+          </Card>
+        </Grid>
       </Grid>
-
-      {/* Itens inclusos, formas de pagamento, e avaliações */}
-      <Typography variant="h6" mt={2}>Itens Inclusos:</Typography>
-      <Typography variant="body1" paragraph>
-        {product.itemsIncluded || '2x 1Litro Shampoo + escova semi definitiva'}
-      </Typography>
-      <Typography variant="h6">Formas de Pagamento:</Typography>
-      <Typography variant="body1" paragraph>
-        {product.paymentMethods || 'Pix, Boleto ou 10x Sem juros no Cartão'}
-      </Typography>
-      <Typography variant="h6">Avaliações:</Typography>
-      <Typography variant="body1" paragraph>
-        {product.reviews || 'Não especificado'}
-      </Typography>
-
-      {/* Preço do produto */}
-      <Typography variant="h5" mt={2} align="center">
-        Preço: {product.price}
-      </Typography>
-
-      {/* Contador de Itens */}
-      <Box display="flex" alignItems="center" gap={2}>
-        <Button onClick={handleRemove} variant="outlined">-</Button>
-        <Typography variant="h6">{quantity}</Typography>
-        <Button onClick={handleAdd} variant="outlined">+</Button>
-      </Box>
-
-      {/* Simulador de Frete */}
-      <Box display="flex" flexDirection="column" alignItems="center" gap={2} mt={2}>
-        <TextField
-          label="Digite seu CEP"
-          variant="outlined"
-          value={cep}
-          onChange={handleCepChange}
-          style={{ width: '200px' }}
-        />
-        <Button onClick={handleCalculateFreight} variant="contained" color="primary">
-          Calcular Frete
-        </Button>
-      </Box>
-
-      {/* Botão Adicionar ao Carrinho */}
-      <Box mt={2}>
-        <Button onClick={handleAddToCart} variant="contained" color="secondary">
-          Adicionar ao Carrinho
-        </Button>
-      </Box>
     </Box>
   );
 };

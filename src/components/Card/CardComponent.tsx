@@ -1,5 +1,3 @@
-// src/components/Card/CardComponent.tsx
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Card as MuiCard, CardContent, CardMedia, Typography, Button, Box } from '@mui/material';
@@ -14,10 +12,21 @@ interface CardComponentProps {
 }
 
 const CardComponent: React.FC<CardComponentProps> = ({ id, title, subtitle, imgSrc, price, onDetailsClick }) => {
-  // Calcula o valor da parcela
-  const priceValue = parseFloat(price.replace('R$', '').replace(',', '.')); // Converte o preço para número
-  const installmentValue = (priceValue / 10).toFixed(2); // Divide por 10 e formata com duas casas decimais
+  // Converte o preço para número, removendo o prefixo 'R$', substituindo ',' por '.' e convertendo para float
+  const priceValue = parseFloat(price.replace('R$', '').replace('.', '').replace(',', '.'));
+  
+  // Verifica se a conversão foi bem-sucedida
+  if (isNaN(priceValue)) {
+    console.error('Erro ao converter o preço:', price);
+    return null;
+  }
 
+  // Calcula o valor da parcela
+  const installmentValue = (priceValue / 10).toFixed(2); // Divide por 10 e formata com duas casas decimais
+  
+  // Formata o preço de volta para o formato 'R$ xx.xx'
+  const formattedPrice = priceValue.toFixed(2).replace('.', ',');
+  
   return (
     <MuiCard
       sx={{
@@ -53,7 +62,7 @@ const CardComponent: React.FC<CardComponentProps> = ({ id, title, subtitle, imgS
               fontSize: '1.25rem' // Aumenta o tamanho da fonte
             }}
           >
-            {price}
+            {`R$ ${formattedPrice}`}  {/* Exibe o preço formatado */}
           </Typography>
           <Typography
             variant="body2"
@@ -70,7 +79,6 @@ const CardComponent: React.FC<CardComponentProps> = ({ id, title, subtitle, imgS
           </Typography>
         </Box>
         <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-          
           <Button
             component={Link}
             to={`/product-details/${id}`}
