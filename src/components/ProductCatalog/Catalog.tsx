@@ -7,13 +7,12 @@ import { fetchProducts } from '../../services/productService';
 import CardComponent from '../Card/CardComponent';
 import 'slick-carousel/slick/slick.css'; 
 import 'slick-carousel/slick/slick-theme.css'; 
-import './Catalog.css'; // Importe o CSS para garantir que as regras sejam aplicadas
+import './Catalog.css';
 
-// Definindo o tipo Product
+// Atualize a interface Product para refletir a estrutura real dos produtos
 interface Product {
   id: number;
   title: string;
-  description: string;
   imageUrl: string;
   price: string;
 }
@@ -80,7 +79,7 @@ const Catalog: React.FC = () => {
       <Typography
         variant="h3"
         align="center"
-        sx={{ mt: 4, mb: 4 }} // Adiciona espaçamento superior e inferior
+        sx={{ mt: 4, mb: 4 }}
       >
         Produtos selecionados para Você
       </Typography>
@@ -92,9 +91,9 @@ const Catalog: React.FC = () => {
               <CardComponent
                 id={product.id}
                 title={product.title}
-                subtitle={product.description}
+                subtitle="" // Passa uma string vazia aqui
                 imgSrc={product.imageUrl}
-                price={product.price} // Passando o preço ao CardComponent
+                price={product.price}
               />
             </div>
           ))}

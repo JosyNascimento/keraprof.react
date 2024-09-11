@@ -44,4 +44,4 @@ const MenuItem: React.FC<MenuItemProps> = ({ title, subItems }) => {
   );
 };
 
-export default MenuItem; // Adicionando export para que o arquivo seja reconhecido como um módulo
+export default MenuItem; // export para que o arquivo seja reconhecido como um módulo

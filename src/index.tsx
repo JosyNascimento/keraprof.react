@@ -23,7 +23,7 @@ root.render(
         <Route path="/product-details/:id" element={<ProductDetailPage />} />
         <Route path="/catalog" element={<Catalog />} />
         <Route path="/product/:id" element={<ProductDetailPage />} />
-        {/* Adicionar outras rotas se necessário */}
+        {/* Adicionarei outras rotas se necessário */}
       </Routes>
       </CartProvider>
       <Footer />

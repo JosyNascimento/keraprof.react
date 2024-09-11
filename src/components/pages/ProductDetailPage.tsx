@@ -1,24 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { Box, Typography, Button, TextField, Grid, Card, CardContent, Collapse, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
-import { fetchProductById } from '../../services/productService';
+import { useParams, useNavigate } from 'react-router-dom';  // Importando useNavigate
+import { Box, Typography, Button, TextField, Grid, Card, CardContent, Collapse, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
+import { ArrowBack } from '@mui/icons-material';  // Importando o ícone de seta
+import { fetchProductById } from '../../services/productService';  
 import { useCart } from '../../context/CartContext';
 
-// Função para calcular o frete com base no CEP
 const calculateFreight = (cep: string) => {
-  // Tabela de frete simplificada com base no estado
   const freightRates: { [key: string]: number } = {
     'SP': 15.00,
     'RJ': 20.00,
     'MG': 25.00,
     'ES': 18.00,
-    'outros': 30.00 // taxa padrão para outros estados
+    'outros': 30.00 
   };
 
-  // Extrair o estado do CEP (assumindo que o CEP é no formato "XXXXX-XXX")
   const state = cep.slice(0, 2);
-
-  // Retornar a taxa de frete com base no estado
   return freightRates[state] || freightRates['outros'];
 };
 
@@ -30,13 +26,20 @@ const ProductDetailPage: React.FC = () => {
   const [showPaymentTable, setShowPaymentTable] = useState(false);
   const [freight, setFreight] = useState<number | null>(null);
   const { addToCart } = useCart();
+  const [openImageDialog, setOpenImageDialog] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const navigate = useNavigate();  // Usando useNavigate
 
   useEffect(() => {
     const loadProduct = async () => {
       if (id) {
         const productId = parseInt(id, 10);
-        const productDetails = await fetchProductById(productId);
-        setProduct(productDetails);
+        try {
+          const productDetails = await fetchProductById(productId);
+          setProduct(productDetails);
+        } catch (error) {
+          console.error('Erro ao carregar o produto:', error);
+        }
       }
     };
 
@@ -60,11 +63,20 @@ const ProductDetailPage: React.FC = () => {
 
   const togglePaymentTable = () => setShowPaymentTable(prev => !prev);
 
+  const handleOpenImageDialog = (image: string) => {
+    setSelectedImage(image);
+    setOpenImageDialog(true);
+  };
+
+  const handleCloseImageDialog = () => {
+    setOpenImageDialog(false);
+    setSelectedImage(null);
+  };
+
   if (!product) {
     return <Typography variant="h6">Produto não encontrado ou carregando...</Typography>;
   }
 
-  // Extrair o valor numérico do preço
   const priceString = product.price.replace('R$', '').replace(',', '.').trim();
   const price = parseFloat(priceString);
 
@@ -77,19 +89,39 @@ const ProductDetailPage: React.FC = () => {
 
   return (
     <Box p={3}>
+      <Box mb={3}>
+        <Button
+          variant="outlined"
+          color="secondary"
+          onClick={() => navigate('/')}  // Navegação para a HomePage
+          sx={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'center', 
+            minWidth: 'unset', 
+            padding: 0, 
+            borderRadius: '50%', 
+            width: 40, 
+            height: 40,
+            '&:hover': { 
+              backgroundColor: 'lightgray' 
+            } 
+          }}
+        >
+          <ArrowBack />  {/* Somente ícone de seta */}
+        </Button>
+      </Box>
+      
       <Grid container spacing={3}>
-        
-        {/* Thumb-gallery */}
         <Grid item xs={12} sm={4}>
           <Box display="flex" flexDirection="column" alignItems="center" gap={2}>
-            
-            {/* Exibindo quatro imagens do produto */}
             {product.images?.slice(0, 4).map((image: string, index: number) => (
               <Box key={index} mb={2}>
                 <img 
-                  src={image} 
-                  alt={`Imagem ${index + 1} do produto`} 
-                  style={{ width: '100%', height: 'auto', borderRadius: '8px' }} 
+                  src={image}
+                  alt={`Imagem ${index + 1}`} 
+                  style={{ width: '100%', height: 'auto', borderRadius: '8px', cursor: 'pointer' }} 
+                  onClick={() => handleOpenImageDialog(image)}  
                 />
               </Box>
             ))}
@@ -125,15 +157,27 @@ const ProductDetailPage: React.FC = () => {
                   variant="outlined"
                   size="small"
                 />
-                <Button variant="contained" onClick={handleCalculateFreight}>Calcular Frete</Button>
+                <Button 
+                  variant="contained" 
+                  onClick={handleCalculateFreight} 
+                  sx={{ backgroundColor: 'gold', color: 'black', '&:hover': { backgroundColor: 'darkgoldenrod' } }}
+                >
+                  OK
+                </Button>
+        
                 {freight !== null && (
                   <Typography variant="h6" mt={2}>Frete: R${freight.toFixed(2)}</Typography>
                 )}
               </Box>
 
               <Box mt={2}>
-                <Button variant="contained" color="primary" onClick={handleAddToCart}>
-                  Adicionar ao Carrinho
+                <Button 
+                  variant="contained" 
+                  color="primary" 
+                  onClick={handleAddToCart}
+                  sx={{ backgroundColor: 'deeppink', color: 'white', '&:hover': { backgroundColor: '#B5A642' } }}
+                >
+                  Comprar
                 </Button>
               </Box>
 
@@ -173,6 +217,32 @@ const ProductDetailPage: React.FC = () => {
           </Card>
         </Grid>
       </Grid>
+
+      <Dialog
+        open={openImageDialog}
+        onClose={handleCloseImageDialog}
+        maxWidth="md"
+        fullWidth
+      >
+        <DialogTitle>Visualizar Imagem</DialogTitle>
+        <DialogContent>
+          {selectedImage && (
+            <img
+              src={selectedImage}
+              alt="Imagem do produto"
+              style={{ width: '100%', height: 'auto' }}
+            />
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button 
+            onClick={handleCloseImageDialog} 
+            sx={{ backgroundColor: '#B5A642', color: 'white', '&:hover': { backgroundColor: 'gold' } }}
+          >
+            Fechar
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };
