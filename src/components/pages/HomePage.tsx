@@ -1,5 +1,3 @@
-// src/components/pages/HomePage.tsx
-
 import React from 'react';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
@@ -10,34 +8,50 @@ import qualidadeImg from '../../assets/img/qualidade.png';
 import caixaImg from '../../assets/img/caixa.png';
 import cartaoImg from '../../assets/img/cartão.png';
 import caminhaoImg from '../../assets/img/caminhão.png';
-import { Box, Typography, Container, Grid } from '@mui/material';
+import { Box, Container } from '@mui/material';
 import Catalog from '../ProductCatalog/Catalog';
-import Footer from './../Footer/Footer'; // Importando o Footer
 
 const HomePage: React.FC = () => {
   const settings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    autoplay: true,
-    autoplaySpeed: 3000,
+    infinite: true,          // Loop infinito
+    speed: 500,              // Velocidade de transição
+    slidesToShow: 1,         // Mostrar um slide por vez
+    slidesToScroll: 1,       // Rolar um slide por vez
+    autoplay: true,          // Iniciar automaticamente
+    autoplaySpeed: 3000,     // Velocidade de autoplay (em milissegundos)  
   };
-
 
   return (
     <div>
       {/* Slider de Imagens */}
-      <Slider >
-        <div>
-          <img src={img1} alt="Imagem 1" style={{ width: '100%', height: '60%' }} />
-        </div>
-        <div>
-          <img src={img2} alt="Imagem 2" style={{ width: '100%', height: '60%' }} />
-        </div>
-
-      </Slider>
+      <div style={{ width: '100%', maxWidth: '100vw', marginBottom: '2rem' }}>
+        <Slider {...settings}>
+          <div>
+            <img
+              src={img1}
+              alt="Imagem 1"
+              style={{
+                width: '110%',//verificar pq esta com espaço
+                height: 'auto',
+                maxHeight: '500px',
+                objectFit: 'cover',
+              }}
+            />
+          </div>
+          <div>
+            <img
+              src={img2}
+              alt="Imagem 2"
+              style={{
+                width: '110%', //verificar pq esta com espaço
+                height: 'auto',
+                maxHeight: '500px',
+                objectFit: 'cover',
+              }}
+            />
+          </div>
+        </Slider>
+      </div>
 
       {/* Adicionando novos elementos */}
       <div className="line-content">
@@ -45,16 +59,12 @@ const HomePage: React.FC = () => {
           <Box display="flex" justifyContent="space-between" alignItems="center" flexWrap="wrap">
             {/* Primeiro Bloco */}
             <a className="box-content flex" style={{ display: 'flex', alignItems: 'center', padding: '1rem 0' }}>
-              <div className="box-img" style={{ backgroundColor: 'white', padding: '0.5rem', borderRadius: '8px' }}>
+              <div className="box-img" style={{ padding: '0.5rem', borderRadius: '8px' }}>
                 <img src={caixaImg} alt="caixa para envio" style={{ width: '48px', margin: '1rem', height: '48px' }} />
               </div>
               <div className="box-text">
-                <div className="first text-uppercase text-lg font-bold">
-                  Os melhores produtos
-                </div>
-                <div className="second text-gray-600">
-                  Você encontra aqui!
-                </div>
+                <div className="first text-uppercase text-lg font-bold">Os melhores produtos</div>
+                <div className="second text-gray-600">Você encontra aqui!</div>
               </div>
             </a>
 
