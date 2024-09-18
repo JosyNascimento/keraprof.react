@@ -1,9 +1,17 @@
+// src/components/MenuItem.tsx
+
 import React, { useState } from 'react';
 import { Menu, MenuItem as MuiMenuItem, Button } from '@mui/material';
+import { Link } from 'react-router-dom';
+
+interface SubItem {
+  title: string;
+  link: string;
+}
 
 interface MenuItemProps {
   title: string;
-  subItems: string[];
+  subItems: SubItem[];
 }
 
 const MenuItem: React.FC<MenuItemProps> = ({ title, subItems }) => {
@@ -36,7 +44,9 @@ const MenuItem: React.FC<MenuItemProps> = ({ title, subItems }) => {
       >
         {subItems.map((subItem, index) => (
           <MuiMenuItem key={index} onClick={handleClose}>
-            {subItem}
+            <Link to={subItem.link} style={{ textDecoration: 'none', color: 'inherit' }}>
+              {subItem.title}
+            </Link>
           </MuiMenuItem>
         ))}
       </Menu>
@@ -44,4 +54,4 @@ const MenuItem: React.FC<MenuItemProps> = ({ title, subItems }) => {
   );
 };
 
-export default MenuItem; // export para que o arquivo seja reconhecido como um módulo
+export default MenuItem;

@@ -66,3 +66,17 @@ export const fetchProductById = async (id: number): Promise<Product | null> => {
     return null;
   }
 };
+
+// Função para buscar produtos com base na consulta de busca
+export const searchProducts = async (query: string): Promise<Product[]> => {
+  try {
+    const products = await fetchProducts();
+    console.log('Produtos disponíveis:', products); // Log para verificar produtos disponíveis
+    return products.filter(product =>
+      product.title.toLowerCase().includes(query.toLowerCase())
+    );
+  } catch (error) {
+    console.error('Erro ao buscar produtos:', error);
+    return [];
+  }
+};

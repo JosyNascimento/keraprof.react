@@ -12,7 +12,7 @@ import cartaoImg from '../../assets/img/cartão.png';
 import caminhaoImg from '../../assets/img/caminhão.png';
 import { Box, Typography, Container, Grid } from '@mui/material';
 import Catalog from '../ProductCatalog/Catalog';
-import Footer from '../Footer/Footer'; // Importando o Footer
+import Footer from './../Footer/Footer'; // Importando o Footer
 
 const HomePage: React.FC = () => {
   const settings = {
@@ -25,16 +25,18 @@ const HomePage: React.FC = () => {
     autoplaySpeed: 3000,
   };
 
+
   return (
     <div>
       {/* Slider de Imagens */}
-      <Slider {...settings}>
+      <Slider >
         <div>
           <img src={img1} alt="Imagem 1" style={{ width: '100%', height: '60%' }} />
         </div>
         <div>
           <img src={img2} alt="Imagem 2" style={{ width: '100%', height: '60%' }} />
         </div>
+
       </Slider>
 
       {/* Adicionando novos elementos */}

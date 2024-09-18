@@ -9,7 +9,7 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css'; 
 import './Catalog.css';
 
-// Atualize a interface Product para refletir a estrutura real dos produtos
+//estrutura real dos produtos
 interface Product {
   id: number;
   title: string;
@@ -91,7 +91,7 @@ const Catalog: React.FC = () => {
               <CardComponent
                 id={product.id}
                 title={product.title}
-                subtitle="" // Passa uma string vazia aqui
+                subtitle="" //string vazia aqui
                 imgSrc={product.imageUrl}
                 price={product.price}
               />

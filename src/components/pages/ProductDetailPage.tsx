@@ -1,9 +1,13 @@
+// src/components/pages/ProductDetailPage.tsx
+
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';  // Importando useNavigate
+import { useParams, useNavigate } from 'react-router-dom';
 import { Box, Typography, Button, TextField, Grid, Card, CardContent, Collapse, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
-import { ArrowBack } from '@mui/icons-material';  // Importando o ícone de seta
-import { fetchProductById } from '../../services/productService';  
-import { useCart } from '../../context/CartContext';
+import { ArrowBack } from '@mui/icons-material';
+import { fetchProductById } from '../../services/productService';
+import AddToCartButton from '../Cart/AddToCartButton';
+
+
 
 const calculateFreight = (cep: string) => {
   const freightRates: { [key: string]: number } = {
@@ -25,10 +29,9 @@ const ProductDetailPage: React.FC = () => {
   const [cep, setCep] = useState('');
   const [showPaymentTable, setShowPaymentTable] = useState(false);
   const [freight, setFreight] = useState<number | null>(null);
-  const { addToCart } = useCart();
   const [openImageDialog, setOpenImageDialog] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
-  const navigate = useNavigate();  // Usando useNavigate
+  const navigate = useNavigate(); // Usando useNavigate
 
   useEffect(() => {
     const loadProduct = async () => {
@@ -52,13 +55,6 @@ const ProductDetailPage: React.FC = () => {
   const handleCalculateFreight = () => {
     const freightValue = calculateFreight(cep);
     setFreight(freightValue);
-  };
-
-  const handleAddToCart = () => {
-    if (product) {
-      addToCart({ ...product, quantity });
-      alert(`Produto "${product.title}" adicionado ao carrinho com quantidade ${quantity}.`);
-    }
   };
 
   const togglePaymentTable = () => setShowPaymentTable(prev => !prev);
@@ -171,14 +167,7 @@ const ProductDetailPage: React.FC = () => {
               </Box>
 
               <Box mt={2}>
-                <Button 
-                  variant="contained" 
-                  color="primary" 
-                  onClick={handleAddToCart}
-                  sx={{ backgroundColor: 'deeppink', color: 'white', '&:hover': { backgroundColor: '#B5A642' } }}
-                >
-                  Comprar
-                </Button>
+                <AddToCartButton item={product} quantity={quantity} />
               </Box>
 
               <Box mt={4}>
