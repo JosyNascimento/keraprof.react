@@ -1,0 +1,147 @@
+{
+    "Categories": [
+      {
+        "id": "alisamento",
+        "title": "ALISAMENTO",
+        "items": [
+          {
+            "id": "escova-em-gel",
+            "title": "ESCOVA EM GEL",
+            "description": "Descrição da escova em gel.",
+            "image": "url_da_imagem_escova_em_gel.jpg",
+            "price": 249.00,
+            "stock": 100
+          },
+          {
+            "id": "escova-progressiva",
+            "title": "ESCOVA PROGRESSIVA",
+            "description": "Descrição da escova progressiva.",
+            "image": "url_da_imagem_escova_progressiva.jpg",
+            "price": 75.00,
+            "stock": 50
+          },
+          {
+            "id": "escova-definitiva",
+            "title": "ESCOVA DEFINITIVA",
+            "description": "Descrição da escova definitiva.",
+            "image": "url_da_imagem_escova_definitiva.jpg",
+            "price": 280.00,
+            "stock": 30
+          },
+          {
+            "id": "escova-japonesa",
+            "title": "ESCOVA JAPONESA",
+            "description": "Descrição da escova japonesa.",
+            "image": "url_da_imagem_escova_japonesa.jpg",
+            "price": 99.90,
+            "stock": 20
+          }
+        ]
+      },
+      {
+        "id": "linhas-especiais",
+        "title": "LINHAS ESPECIAIS",
+        "items": [
+          {
+            "id": "force-repair",
+            "title": "FORCE REPAIR",
+            "description": "Descrição do Force Repair.",
+            "image": "url_da_imagem_force_repair.jpg",
+            "price": 60.00,
+            "stock": 40
+          },
+          {
+            "id": "oliver-oil",
+            "title": "OLIVER OIL",
+            "description": "Descrição do Oliver Oil.",
+            "image": "url_da_imagem_oliver_oil.jpg",
+            "price": 55.00,
+            "stock": 70
+          },
+          {
+            "id": "sos-capilar",
+            "title": "SOS CAPILAR",
+            "description": "Descrição do SOS Capilar.",
+            "image": "url_da_imagem_sos_capilar.jpg",
+            "price": 45.00,
+            "stock": 80
+          },
+          {
+            "id": "desmaia-cabelo",
+            "title": "DESMAIA CABELO",
+            "description": "Descrição do Desmaia Cabelo.",
+            "image": "url_da_imagem_desmaia_cabelo.jpg",
+            "price": 49.90,
+            "stock": 60
+          }
+        ]
+      },
+      {
+        "id": "cuidados-pessoais",
+        "title": "CUIDADOS PESSOAIS",
+        "items": [
+          {
+            "id": "cabelo-e-banho",
+            "title": "CABELO E BANHO",
+            "description": "Descrição de cabelo e banho.",
+            "image": "url_da_imagem_cabelo_e_banho.jpg",
+            "price": 30.00,
+            "stock": 150
+          }
+        ]
+      },
+      {
+        "id": "skin-care",
+        "title": "SKIN CARE",
+        "items": [
+          {
+            "id": "cuidados-para-a-pele",
+            "title": "CUIDADOS PARA A PELE",
+            "description": "Descrição de cuidados para a pele.",
+            "image": "url_da_imagem_cuidados_para_a_pele.jpg",
+            "price": 35.00,
+            "stock": 120
+          }
+        ]
+      },
+      {
+        "id": "produtos-para-cabelo",
+        "title": "PRODUTOS PARA CABELO",
+        "items": [
+          {
+            "id": "reconstrutor-dos-fios",
+            "title": "RECONSTRUTOR DOS FIOS",
+            "description": "Descrição do Reconstrutor dos Fios.",
+            "image": "url_da_imagem_reconstrutor_dos_fios.jpg",
+            "price": 70.00,
+            "stock": 90
+          },
+          {
+            "id": "tratamento-de-mel",
+            "title": "TRATAMENTO DE MEL",
+            "description": "Descrição do Tratamento de Mel.",
+            "image": "url_da_imagem_tratamento_de_mel.jpg",
+            "price": 65.00,
+            "stock": 110
+          },
+          {
+            "id": "matizador",
+            "title": "MATIZADOR",
+            "description": "Descrição do Matizador.",
+            "image": "url_da_imagem_matizador.jpg",
+            "price": 55.00,
+            "stock": 95
+          },
+          {
+            "id": "finalizador",
+            "title": "FINALIZADOR",
+            "description": "Descrição do Finalizador.",
+            "image": "url_da_imagem_finalizador.jpg",
+            "price": 50.00,
+            "stock": 85
+          }
+        ]
+      }
+    ]
+  }
+  

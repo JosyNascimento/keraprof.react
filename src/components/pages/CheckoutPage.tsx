@@ -25,25 +25,16 @@ const CheckoutPage: React.FC = () => {
     alert('Pedido finalizado com sucesso!');
   };
 
+  const handleContinueShopping = () => {
+    // Navegar para a página inicial
+    navigate('/'); // Atualize o caminho conforme a sua configuração de rotas
+  };
+
   return (
     <Box p={3}>
-      {/* Botões de Navegação */}
+
       <Box mb={2} display="flex" alignItems="center">
-        <IconButton 
-          onClick={() => { 
-            navigate(-1); 
-          }} 
-          size="large"
-          aria-label="Voltar"
-          sx={{ 
-            color: 'deeppink', 
-            '&:hover': { color: 'darkmagenta' }, 
-            marginRight: 2
-          }}
-        >
-          <ArrowBackIcon fontSize="large" />
-        </IconButton>
-        <Typography variant="h4">Finalizar Compra</Typography>
+      <Typography variant="h4">Detalhes do seu Pedido</Typography>
       </Box>
 
       <Card>
@@ -116,7 +107,21 @@ const CheckoutPage: React.FC = () => {
         />
       </Box>
 
-      <Box mt={3}>
+      <Box mt={3} display="flex" gap={2}>
+        <Button 
+          variant="contained" 
+          onClick={handleContinueShopping}
+          sx={{ 
+            backgroundColor: '#B5A642;', 
+            color: 'white', 
+            '&:hover': { backgroundColor: 'darkgrey' }, 
+            fontSize: '0.875rem', // Define o tamanho da fonte para deixar o botão menor
+            padding: '8px 16px', // Ajusta o padding para deixar o botão menor
+            minWidth: 'unset', // Remove a largura mínima padrão
+          }}
+        >
+          Continuar Comprando
+        </Button>
         <Button 
           variant="contained" 
           onClick={handleCheckout}
@@ -127,7 +132,6 @@ const CheckoutPage: React.FC = () => {
             fontSize: '0.875rem', // Define o tamanho da fonte para deixar o botão menor
             padding: '8px 16px', // Ajusta o padding para deixar o botão menor
             minWidth: 'unset', // Remove a largura mínima padrão
-            
           }}
         >
           Finalizar Compra

@@ -47,7 +47,10 @@ export const fetchProducts = async (): Promise<Product[]> => {
             title: 'Kit Antiqueda Jaborandi Sh Cd 1l Másc 1kg Bio Extratus', 
             imageUrl: 'https://i.postimg.cc/PrQTKc24/kit-bio-stratus.webp',
             price: 'R$289,99'
+
+            
           },
+          
         ]);
       } catch (error) {
         reject(error);

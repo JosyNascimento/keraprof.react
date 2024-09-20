@@ -1,4 +1,4 @@
-// src/components/pages/ProductDetailPage.tsx
+// src/components/pages/DetailPage.tsx
 
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
