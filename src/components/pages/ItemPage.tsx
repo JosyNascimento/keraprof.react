@@ -12,7 +12,7 @@ interface Product {
   description: string;
 }
 
-const ProductPage: React.FC = () => {
+const ItemPage: React.FC = () => { // Renomeado para ItemPage
   const { id } = useParams<{ id: string }>();
   const [product, setProduct] = useState<Product | null>(null);
 
@@ -45,4 +45,4 @@ const ProductPage: React.FC = () => {
   );
 };
 
-export default ProductPage;
+export default ItemPage; 

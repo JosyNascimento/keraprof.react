@@ -7,8 +7,6 @@ import { ArrowBack } from '@mui/icons-material';
 import { fetchProductById } from '../../services/productService';
 import AddToCartButton from '../Cart/AddToCartButton';
 
-
-
 const calculateFreight = (cep: string) => {
   const freightRates: { [key: string]: number } = {
     'SP': 15.00,
@@ -31,7 +29,7 @@ const ProductDetailPage: React.FC = () => {
   const [freight, setFreight] = useState<number | null>(null);
   const [openImageDialog, setOpenImageDialog] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
-  const navigate = useNavigate(); // Usando useNavigate
+  const navigate = useNavigate();
 
   useEffect(() => {
     const loadProduct = async () => {
@@ -89,27 +87,28 @@ const ProductDetailPage: React.FC = () => {
         <Button
           variant="outlined"
           color="secondary"
-          onClick={() => navigate('/')}  // Navegação para a HomePage
+          onClick={() => navigate('/')}
           sx={{ 
             display: 'flex', 
             alignItems: 'center', 
             justifyContent: 'center', 
             minWidth: 'unset', 
-            padding: 0, 
+            padding: 2, 
             borderRadius: '50%', 
             width: 40, 
             height: 40,
+            margin: 2,
             '&:hover': { 
               backgroundColor: 'lightgray' 
             } 
           }}
         >
-          <ArrowBack />  {/* Somente ícone de seta */}
+          <ArrowBack />
         </Button>
       </Box>
       
       <Grid container spacing={3}>
-        <Grid item xs={12} sm={4}>
+        <Grid item xs={12} sm={6}>
           <Box display="flex" flexDirection="column" alignItems="center" gap={2}>
             {product.images?.slice(0, 4).map((image: string, index: number) => (
               <Box key={index} mb={2}>
@@ -124,28 +123,25 @@ const ProductDetailPage: React.FC = () => {
           </Box>
         </Grid>
 
-        <Grid item xs={12} sm={8}>
+        <Grid item xs={12} sm={6}>
           <Card>
             <CardContent>
-              <Typography variant="h5">{product.title}</Typography>
-              <Typography variant="body1" color="textSecondary" gutterBottom>
-                {product.description}
-              </Typography>
-              <Typography variant="h4" style={{ color: 'deeppink' }}>
+              <Typography variant="h5" align="center">{product.title}</Typography>
+              <Typography variant="h4" style={{ color: 'deeppink', textAlign: 'center' }}>
                 Preço: R${price.toFixed(2)}
               </Typography>
 
-              <Box mt={2}>
+              <Box mt={2} display="flex" justifyContent="center" alignItems="center">
                 <Button variant="outlined" onClick={handleRemove}>-</Button>
                 <Typography variant="h6" component="span" mx={2}>{quantity}</Typography>
                 <Button variant="outlined" onClick={handleAdd}>+</Button>
               </Box>
 
-              <Typography variant="h6" mt={2}>
+              <Typography variant="h6" mt={2} align="center">
                 Total: R${totalPrice.toFixed(2)}
               </Typography>
 
-              <Box mt={2}>
+              <Box mt={2} display="flex" justifyContent="center" alignItems="center">
                 <TextField
                   label="CEP"
                   value={cep}
@@ -171,7 +167,7 @@ const ProductDetailPage: React.FC = () => {
               </Box>
 
               <Box mt={4}>
-                <Button variant="outlined" onClick={togglePaymentTable}>
+                <Button variant="outlined" onClick={togglePaymentTable} sx={{ width: '100%' }}>
                   {showPaymentTable ? 'Ocultar Formas de Pagamento' : 'Ver Formas de Pagamento'}
                 </Button>
                 <Collapse in={showPaymentTable}>
@@ -206,6 +202,38 @@ const ProductDetailPage: React.FC = () => {
           </Card>
         </Grid>
       </Grid>
+
+      <Box mt={4} textAlign="center">
+        <Typography variant="h6">Descrição:</Typography>
+        <Typography variant="body1" gutterBottom sx={{ textAlign: 'justify' }}>
+          {product.description}
+        </Typography>
+
+        <Typography variant="h6">Conselho de Aplicação:</Typography>
+        <Typography variant="body1" gutterBottom>
+          - Passo 1: Lave os cabelos com o shampoo. <br />
+          - Passo 2: Aplique o redutor de queratina.
+        </Typography>
+
+        <Typography variant="h6">Contém:</Typography>
+        <Typography variant="body1" gutterBottom>
+          - 01 Shampoo Limpeza Intensa (passo 1) <br />
+          - 01 Redutor de Queratina (passo 2)
+        </Typography>
+
+        <Typography variant="h6">Resultado:</Typography>
+        <Typography variant="body1" gutterBottom>
+          - Cabelos lisos, macios, hidratados, com volume reduzido e sem frizz. Fios mais saudáveis!
+        </Typography>
+
+        <Typography variant="h6">Cuidados:</Typography>
+        <Typography variant="body1" gutterBottom>
+          - Manter fora do alcance das crianças. <br />
+          - Em caso de contato com os olhos, lavar abundantemente com água. <br />
+          - Em caso de irritação, suspenda o uso e procure um médico. <br />
+          - Manter em local fresco.
+        </Typography>
+      </Box>
 
       <Dialog
         open={openImageDialog}

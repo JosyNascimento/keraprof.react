@@ -1,13 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  AppBar,
-  Toolbar,
-  Typography,
-  Box,
-  IconButton,
-  useMediaQuery,
-  Drawer,
-} from "@mui/material";
+import {AppBar,Toolbar,Typography,Box,IconButton,useMediaQuery,Drawer} from "@mui/material";
 import MenuItem from "./MenuItem";
 import SearchBar from "./SearchBar";
 import logo from "../../assets/img/logok.png";
@@ -16,19 +8,10 @@ import CartIcon from "../Cart/CartIcon";
 import CartPage from "../Cart/CartPage";
 import HomeIcon from "@mui/icons-material/Home";
 import { Link } from "react-router-dom";
-import { db } from "../../firebase"; // Verifique se o caminho está correto
-import {
-  collection,
-  getDocs,
-  addDoc,
-  query,
-  where,
-  updateDoc,
-  doc,
-} from "firebase/firestore";
+import { db } from '../../firebase';
+import { getFirestore,doc,getDoc,collection,getDocs,DocumentData,query,where,limit,} from "firebase/firestore";
 
-// Adicione isso para tratar o arquivo como módulo
-export {};
+
 
 // Definição de tipos
 interface Item {
@@ -42,78 +25,13 @@ interface Category {
   items?: Item[];
 }
 
-const NavBar: React.FC = () => {
+
+
+const NavBar = () => {
   const isMobile = useMediaQuery("(max-width:600px)");
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [cartDrawerOpen, setCartDrawerOpen] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
-
-  // Função para adicionar ou atualizar categorias no Firestore
-  const addOrUpdateCategories = async () => {
-    const categoriesToAdd = [
-      {
-        title: "Alisamento",
-        items: [
-          { id: "subcat1", title: "Escova Progressiva Blindagem dos fios" },
-          { id: "subcat2", title: "Plastica dos fios Zen Hair 4D" },
-          { id: "subcat3", title: "Escova semi definitiva Zero forever liss" },
-          { id: "subcat4", title: "Escova Plastica dos fios" },
-          { id: "subcat5", title: "Escova Japonesa" },
-          { id: "subcat6", title: "Alisamento térmico Job hair" },
-        ],
-      },
-      {
-        title: "Cuidados Pessoais",
-        items: [
-          { id: "subcat7", title: "Hidratantes" },
-          { id: "subcat8", title: "Protetores Solares" },
-        ],
-      },
-      {
-        title: "Tratamentos para Cabelos",
-        items: [
-          { id: "subcat9", title: "Reconstrutor dos fios" },
-          { id: "subcat10", title: "Kit antiqueda Jaborandi Bioestratus" },
-          { id: "subcat11", title: "Finalizador" },
-          { id: "subcat12", title: "Tratamento Felps Quiabo XBTX" },
-        ],
-      },
-    ];
-
-    const categoriesCollection = collection(db, "categories");
-
-    // Para cada categoria, verifica se já existe
-    for (const category of categoriesToAdd) {
-      const q = query(
-        categoriesCollection,
-        where("title", "==", category.title)
-      );
-      const categorySnapshot = await getDocs(q);
-
-      if (categorySnapshot.empty) {
-        // Se não existe, adiciona nova categoria
-        await addDoc(categoriesCollection, category);
-      } else {
-        // Se existe, atualiza a categoria com novos itens sem duplicação
-        const categoryDoc = categorySnapshot.docs[0];
-        const existingItems = categoryDoc.data().items || [];
-
-        // Cria um mapa para facilitar a verificação de duplicatas
-        const existingItemsMap = new Map(existingItems.map((item: Item) => [item.id, item]));
-
-        // Atualiza os itens, evitando duplicações
-        for (const newItem of category.items) {
-          existingItemsMap.set(newItem.id, newItem);
-        }
-
-        const updatedItems = Array.from(existingItemsMap.values());
-
-        await updateDoc(doc(db, "categories", categoryDoc.id), {
-          items: updatedItems,
-        });
-      }
-    }
-  };
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -123,11 +41,12 @@ const NavBar: React.FC = () => {
         id: doc.id,
         ...doc.data(),
       })) as Category[];
+
+      console.log("Categorias carregadas:", categoryList);
       setCategories(categoryList);
     };
 
     fetchCategories();
-    addOrUpdateCategories(); // Chama a função para adicionar ou atualizar as categorias, mas apenas uma vez
   }, []);
 
   const toggleDrawer = (open: boolean) => () => {
@@ -195,9 +114,7 @@ const NavBar: React.FC = () => {
                 onClose={toggleDrawer(false)}
                 sx={{ "& .MuiDrawer-paper": { width: "50%" } }}
               >
-                <Box
-                  sx={{ display: "flex", flexDirection: "column", padding: 2 }}
-                >
+                <Box sx={{ display: "flex", flexDirection: "column", padding: 2 }}>
                   <SearchBar
                     onSearchResults={(results) => console.log(results)}
                     isMobile={isMobile}
@@ -207,7 +124,7 @@ const NavBar: React.FC = () => {
                       key={category.id}
                       title={category.title}
                       subItems={category.items ? category.items.map((item: Item) => ({
-                        id: item.id, // Inclua o id aqui
+                        id: item.id,
                         title: item.title,
                         link: `/product/${item.id}`,
                       })) : []}
@@ -257,14 +174,14 @@ const NavBar: React.FC = () => {
           {!isMobile &&
             categories.map((category) => (
               <MenuItem
-              key={category.id}
-              title={category.title}
-              subItems={category.items ? category.items.map((item: Item) => ({
-                id: item.id, // Adicione o id aqui
-                title: item.title,
-                link: `/product/${item.id}`,
-              })) : []}
-            />
+                key={category.id}
+                title={category.title}
+                subItems={category.items ? category.items.map((item: Item) => ({
+                  id: item.id,
+                  title: item.title,
+                  link: `/product/${item.id}`,
+                })) : []}
+              />
             ))}
         </Box>
       </Box>

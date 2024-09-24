@@ -10,6 +10,7 @@ import cartaoImg from '../../assets/img/cartão.png';
 import caminhaoImg from '../../assets/img/caminhão.png';
 import { Box, Container } from '@mui/material';
 import Catalog from '../ProductCatalog/Catalog';
+import { Link } from 'react-router-dom';
 
 const HomePage: React.FC = () => {
   const settings = {
