@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Menu, MenuItem as MuiMenuItem, Button } from '@mui/material';
 import { Link } from 'react-router-dom';
 
 interface SubItem {
-  id: string; // Id para vincular ao link do produto
+  id: string;
   title: string;
+  link: string;
 }
 
 interface MenuItemProps {
@@ -13,9 +14,9 @@ interface MenuItemProps {
 }
 
 const MenuItem: React.FC<MenuItemProps> = ({ title, subItems }) => {
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
@@ -25,28 +26,22 @@ const MenuItem: React.FC<MenuItemProps> = ({ title, subItems }) => {
 
   return (
     <div>
-      <Button
-        aria-controls="simple-menu"
-        aria-haspopup="true"
-        onClick={handleClick}
-        color="inherit"
-      >
+      <Button onClick={handleClick} sx={{ color: 'white' }}>
         {title}
       </Button>
       <Menu
-        id="simple-menu"
         anchorEl={anchorEl}
         keepMounted
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-     {subItems.map((subItem, index) => (
-  <MuiMenuItem key={index} onClick={handleClose}>
-    <Link to={`/product/${subItem.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-      {subItem.title}
-    </Link>
-  </MuiMenuItem>
-))}
+        {subItems.map((item) => (
+          <MuiMenuItem key={item.id} onClick={handleClose}>
+            <Link to={item.link} style={{ textDecoration: 'none', color: 'inherit' }}>
+              {item.title}
+            </Link>
+          </MuiMenuItem>
+        ))}
       </Menu>
     </div>
   );

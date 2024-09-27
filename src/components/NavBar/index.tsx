@@ -1,6 +1,8 @@
+// NavBar.tsx
+
 import React, { useEffect, useState } from "react";
-import {AppBar,Toolbar,Typography,Box,IconButton,useMediaQuery,Drawer} from "@mui/material";
-import MenuItem from "./MenuItem";
+import { AppBar, Toolbar, Typography, Box, IconButton, useMediaQuery, Drawer } from "@mui/material";
+import MenuItem from "./MenuItem"; // Certifique-se de que isso está correto
 import SearchBar from "./SearchBar";
 import logo from "../../assets/img/logok.png";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -9,11 +11,9 @@ import CartPage from "../Cart/CartPage";
 import HomeIcon from "@mui/icons-material/Home";
 import { Link } from "react-router-dom";
 import { db } from '../../firebase';
-import { getFirestore,doc,getDoc,collection,getDocs,DocumentData,query,where,limit,} from "firebase/firestore";
+import { collection, getDocs } from 'firebase/firestore';
 
-
-
-// Definição de tipos
+// Interfaces
 interface Item {
   id: string;
   title: string;
@@ -22,10 +22,8 @@ interface Item {
 interface Category {
   id: string;
   title: string;
-  items?: Item[];
+  items?: Item[]; // Subcategorias (opcional)
 }
-
-
 
 const NavBar = () => {
   const isMobile = useMediaQuery("(max-width:600px)");
@@ -37,10 +35,12 @@ const NavBar = () => {
     const fetchCategories = async () => {
       const categoriesCollection = collection(db, "categories");
       const categorySnapshot = await getDocs(categoriesCollection);
-      const categoryList = categorySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      })) as Category[];
+      const categoryList = await Promise.all(categorySnapshot.docs.map(async (doc) => {
+        const data = doc.data() as Category;
+        const items = data.items || []; // Obter subcategorias
+
+        return { id: doc.id, title: data.title, items };
+      }));
 
       console.log("Categorias carregadas:", categoryList);
       setCategories(categoryList);
@@ -123,10 +123,10 @@ const NavBar = () => {
                     <MenuItem
                       key={category.id}
                       title={category.title}
-                      subItems={category.items ? category.items.map((item: Item) => ({
+                      subItems={category.items ? category.items.map((item) => ({
                         id: item.id,
                         title: item.title,
-                        link: `/product/${item.id}`,
+                        link: `/item/${item.id}`, // Link para a página do produto
                       })) : []}
                     />
                   ))}
@@ -176,10 +176,10 @@ const NavBar = () => {
               <MenuItem
                 key={category.id}
                 title={category.title}
-                subItems={category.items ? category.items.map((item: Item) => ({
+                subItems={category.items ? category.items.map((item) => ({
                   id: item.id,
                   title: item.title,
-                  link: `/product/${item.id}`,
+                  link: `/item/${item.id}`, // Verifique se redireciona corretamente
                 })) : []}
               />
             ))}

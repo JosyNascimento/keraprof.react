@@ -1,3 +1,5 @@
+//index.tsx
+
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
@@ -13,7 +15,6 @@ import CheckoutPage from './components/pages/CheckoutPage';
 import EscovaEmGel from './components/pages/EscovaEmGel';
 import ItemPage from './components/pages/ItemPage';
 import ProductDetailPage from './components/pages/ProductDetailPage';
-
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 
 root.render(
@@ -30,7 +31,7 @@ root.render(
               <Route path="/cart" element={<CartPage />} />
               <Route path="/checkout" element={<CheckoutPage />} />
               <Route path="/escova-em-gel" element={<EscovaEmGel />} />
-              <Route path="/detail/:id" element={<ProductDetailPage />} /> 
+              <Route path="/product/:id" element={<ProductDetailPage />} /> 
             </Routes>
           </div>
         </div>
