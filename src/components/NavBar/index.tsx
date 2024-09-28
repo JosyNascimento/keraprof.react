@@ -1,5 +1,3 @@
-// NavBar.tsx
-
 import React, { useEffect, useState } from "react";
 import { AppBar, Toolbar, Typography, Box, IconButton, useMediaQuery, Drawer } from "@mui/material";
 import MenuItem from "./MenuItem"; // Certifique-se de que isso está correto
@@ -9,7 +7,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import CartIcon from "../Cart/CartIcon";
 import CartPage from "../Cart/CartPage";
 import HomeIcon from "@mui/icons-material/Home";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { db } from '../../firebase';
 import { collection, getDocs } from 'firebase/firestore';
 
@@ -30,18 +28,17 @@ const NavBar = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [cartDrawerOpen, setCartDrawerOpen] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCategories = async () => {
       const categoriesCollection = collection(db, "categories");
       const categorySnapshot = await getDocs(categoriesCollection);
-      const categoryList = await Promise.all(categorySnapshot.docs.map(async (doc) => {
+      const categoryList = categorySnapshot.docs.map((doc) => {
         const data = doc.data() as Category;
-        const items = data.items || []; // Obter subcategorias
-
-        return { id: doc.id, title: data.title, items };
-      }));
-
+        return { id: doc.id, title: data.title, items: data.items || [] };
+      });
+      
       console.log("Categorias carregadas:", categoryList);
       setCategories(categoryList);
     };
@@ -55,6 +52,10 @@ const NavBar = () => {
 
   const toggleCartDrawer = (open: boolean) => () => {
     setCartDrawerOpen(open);
+  };
+
+  const handleSubCategoryClick = (id: string) => {
+    navigate(`/product/${id}`);
   };
 
   return (
@@ -126,8 +127,9 @@ const NavBar = () => {
                       subItems={category.items ? category.items.map((item) => ({
                         id: item.id,
                         title: item.title,
-                        link: `/item/${item.id}`, // Link para a página do produto
+                        link: item.id, // Usar ID do produto
                       })) : []}
+                      onSubItemClick={handleSubCategoryClick} // Passar a função de clique
                     />
                   ))}
                 </Box>
@@ -179,8 +181,9 @@ const NavBar = () => {
                 subItems={category.items ? category.items.map((item) => ({
                   id: item.id,
                   title: item.title,
-                  link: `/item/${item.id}`, // Verifique se redireciona corretamente
+                  link: item.id, // Usar ID do produto
                 })) : []}
+                onSubItemClick={handleSubCategoryClick} // Passar a função de clique
               />
             ))}
         </Box>

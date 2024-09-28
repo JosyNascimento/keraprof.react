@@ -1,12 +1,37 @@
-// src/components/pages/DetailPage.tsx
-
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Box, Typography, Button, TextField, Grid, Card, CardContent, Collapse, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
+import {
+  Box,
+  Typography,
+  Button,
+  TextField,
+  Grid,
+  Card,
+  CardContent
+} from '@mui/material';
 import { ArrowBack } from '@mui/icons-material';
-import { fetchProductById } from '../../services/productService';
+import { db } from '../../firebase'; // Import your Firebase configuration
+import { collection, getDocs } from 'firebase/firestore';
 import AddToCartButton from '../Cart/AddToCartButton';
 
+// Definição das interfaces
+// Definição das interfaces
+interface Item {
+  id: string; // Alterado para string se os IDs forem strings
+  title: string;
+  price: string; // Mantendo como string, pois você tem "129.9"
+  descrição: string; // Deixe como 'descrição' se este for o nome no Firebase
+  imageUrl: string;
+  stock: number;
+  destaque: boolean;
+  description?: string; // Adicionando 'description' se o AddToCartButton precisar
+}
+
+interface Category {
+  id: string;
+  title: string;
+  items: Item[];
+}
 
 
 const calculateFreight = (cep: string) => {
@@ -15,33 +40,36 @@ const calculateFreight = (cep: string) => {
     'RJ': 20.00,
     'MG': 25.00,
     'ES': 18.00,
-    'outros': 30.00 
+    'outros': 30.00
   };
-
   const state = cep.slice(0, 2);
   return freightRates[state] || freightRates['outros'];
 };
 
 const ProductDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const [product, setProduct] = useState<any>(null);
+  const [product, setProduct] = useState<Item | null>(null);
   const [quantity, setQuantity] = useState(1);
   const [cep, setCep] = useState('');
-  const [showPaymentTable, setShowPaymentTable] = useState(false);
   const [freight, setFreight] = useState<number | null>(null);
-  const [openImageDialog, setOpenImageDialog] = useState(false);
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
-  const navigate = useNavigate(); // Usando useNavigate
+  const navigate = useNavigate();
 
   useEffect(() => {
     const loadProduct = async () => {
       if (id) {
-        const productId = parseInt(id, 10);
-        try {
-          const productDetails = await fetchProductById(productId);
-          setProduct(productDetails);
-        } catch (error) {
-          console.error('Erro ao carregar o produto:', error);
+        const categoriesRef = collection(db, "categories");
+        const categoriesSnap = await getDocs(categoriesRef);
+        const categories = categoriesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() })) as Category[];
+
+        // Encontrar o produto correspondente ao id
+        const foundProduct = categories.flatMap(category => 
+          category.items?.filter(item => item.id === id) || []
+        )[0];
+
+        if (foundProduct) {
+          setProduct(foundProduct);
+        } else {
+          console.error("Produto não encontrado!");
         }
       }
     };
@@ -57,31 +85,12 @@ const ProductDetailPage: React.FC = () => {
     setFreight(freightValue);
   };
 
-  const togglePaymentTable = () => setShowPaymentTable(prev => !prev);
-
-  const handleOpenImageDialog = (image: string) => {
-    setSelectedImage(image);
-    setOpenImageDialog(true);
-  };
-
-  const handleCloseImageDialog = () => {
-    setOpenImageDialog(false);
-    setSelectedImage(null);
-  };
-
   if (!product) {
     return <Typography variant="h6">Produto não encontrado ou carregando...</Typography>;
   }
 
-  const priceString = product.price.replace('R$', '').replace(',', '.').trim();
-  const price = parseFloat(priceString);
-
-  if (isNaN(price)) {
-    return <Typography variant="h6">Preço inválido para o produto.</Typography>;
-  }
-
+  const price = parseFloat(product.price); // Converter para número
   const totalPrice = price * quantity;
-  const maxInstallments = 10;
 
   return (
     <Box p={3}>
@@ -89,39 +98,32 @@ const ProductDetailPage: React.FC = () => {
         <Button
           variant="outlined"
           color="secondary"
-          onClick={() => navigate('/')}  // Navegação para a HomePage
-          sx={{ 
-            display: 'flex', 
-            alignItems: 'center', 
-            justifyContent: 'center', 
-            minWidth: 'unset', 
-            padding: 0, 
-            borderRadius: '50%', 
-            width: 40, 
+          onClick={() => navigate('/')}
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            minWidth: 'unset',
+            padding: 0,
+            borderRadius: '50%',
+            width: 40,
             height: 40,
-            '&:hover': { 
-              backgroundColor: 'lightgray' 
-            } 
+            '&:hover': {
+              backgroundColor: 'lightgray'
+            }
           }}
         >
-          <ArrowBack />  {/* Somente ícone de seta */}
+          <ArrowBack />
         </Button>
       </Box>
-      
+
       <Grid container spacing={3}>
         <Grid item xs={12} sm={4}>
-          <Box display="flex" flexDirection="column" alignItems="center" gap={2}>
-            {product.images?.slice(0, 4).map((image: string, index: number) => (
-              <Box key={index} mb={2}>
-                <img 
-                  src={image}
-                  alt={`Imagem ${index + 1}`} 
-                  style={{ width: '100%', height: 'auto', borderRadius: '8px', cursor: 'pointer' }} 
-                  onClick={() => handleOpenImageDialog(image)}  
-                />
-              </Box>
-            ))}
-          </Box>
+          <img 
+            src={product.imageUrl} 
+            alt={product.title} 
+            style={{ width: '100%', cursor: 'pointer' }} 
+          />
         </Grid>
 
         <Grid item xs={12} sm={8}>
@@ -129,7 +131,7 @@ const ProductDetailPage: React.FC = () => {
             <CardContent>
               <Typography variant="h5">{product.title}</Typography>
               <Typography variant="body1" color="textSecondary" gutterBottom>
-                {product.description}
+                {product.descrição}
               </Typography>
               <Typography variant="h4" style={{ color: 'deeppink' }}>
                 Preço: R${price.toFixed(2)}
@@ -160,78 +162,25 @@ const ProductDetailPage: React.FC = () => {
                 >
                   OK
                 </Button>
-        
+
                 {freight !== null && (
                   <Typography variant="h6" mt={2}>Frete: R${freight.toFixed(2)}</Typography>
                 )}
               </Box>
 
               <Box mt={2}>
-                <AddToCartButton item={product} quantity={quantity} />
-              </Box>
-
-              <Box mt={4}>
-                <Button variant="outlined" onClick={togglePaymentTable}>
-                  {showPaymentTable ? 'Ocultar Formas de Pagamento' : 'Ver Formas de Pagamento'}
-                </Button>
-                <Collapse in={showPaymentTable}>
-                  <Box mt={2}>
-                    <Typography variant="h6">Formas de Pagamento</Typography>
-                    <TableContainer component={Paper}>
-                      <Table>
-                        <TableHead>
-                          <TableRow>
-                            <TableCell>Parcelamento</TableCell>
-                            <TableCell>Valor da Parcela</TableCell>
-                          </TableRow>
-                        </TableHead>
-                        <TableBody>
-                          {[...Array(maxInstallments)].map((_, index) => {
-                            const parcelCount = index + 1;
-                            const parcelValue = (totalPrice / parcelCount).toFixed(2);
-                            return (
-                              <TableRow key={index}>
-                                <TableCell>{parcelCount}x sem juros</TableCell>
-                                <TableCell>R${parcelValue}</TableCell>
-                              </TableRow>
-                            );
-                          })}
-                        </TableBody>
-                      </Table>
-                    </TableContainer>
-                  </Box>
-                </Collapse>
-              </Box>
+  <AddToCartButton
+    item={{
+      ...product,
+      description: product.descrição // Convertendo 'descrição' para 'description'
+    }}
+    quantity={quantity}
+  />
+</Box>
             </CardContent>
           </Card>
         </Grid>
       </Grid>
-
-      <Dialog
-        open={openImageDialog}
-        onClose={handleCloseImageDialog}
-        maxWidth="md"
-        fullWidth
-      >
-        <DialogTitle>Visualizar Imagem</DialogTitle>
-        <DialogContent>
-          {selectedImage && (
-            <img
-              src={selectedImage}
-              alt="Imagem do produto"
-              style={{ width: '100%', height: 'auto' }}
-            />
-          )}
-        </DialogContent>
-        <DialogActions>
-          <Button 
-            onClick={handleCloseImageDialog} 
-            sx={{ backgroundColor: '#B5A642', color: 'white', '&:hover': { backgroundColor: 'gold' } }}
-          >
-            Fechar
-          </Button>
-        </DialogActions>
-      </Dialog>
     </Box>
   );
 };

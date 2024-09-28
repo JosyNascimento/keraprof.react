@@ -11,9 +11,10 @@ interface SubItem {
 interface MenuItemProps {
   title: string;
   subItems: SubItem[];
+  onSubItemClick?: (id: string) => void; // Adicionada a propriedade
 }
 
-const MenuItem: React.FC<MenuItemProps> = ({ title, subItems }) => {
+const MenuItem: React.FC<MenuItemProps> = ({ title, subItems, onSubItemClick }) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -36,7 +37,15 @@ const MenuItem: React.FC<MenuItemProps> = ({ title, subItems }) => {
         onClose={handleClose}
       >
         {subItems.map((item) => (
-          <MuiMenuItem key={item.id} onClick={handleClose}>
+          <MuiMenuItem
+            key={item.id}
+            onClick={() => {
+              handleClose();
+              if (onSubItemClick) {
+                onSubItemClick(item.id); // Chama a função passada
+              }
+            }}
+          >
             <Link to={item.link} style={{ textDecoration: 'none', color: 'inherit' }}>
               {item.title}
             </Link>

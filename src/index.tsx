@@ -13,9 +13,10 @@ import { CartProvider } from './components/Cart/CartContext';
 import CartPage from './components/Cart/CartPage';
 import CheckoutPage from './components/pages/CheckoutPage';
 import EscovaEmGel from './components/pages/EscovaEmGel';
-import ItemPage from './components/pages/ItemPage';
 import ProductDetailPage from './components/pages/ProductDetailPage';
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
+
+
 
 root.render(
   <React.StrictMode>
@@ -26,7 +27,6 @@ root.render(
           <div style={{ flex: 1 }}>
             <Routes>
               <Route path="/" element={<HomePage />} />
-              <Route path="/item/:id" element={<ItemPage />} />
               <Route path="/catalog" element={<Catalog />} />
               <Route path="/cart" element={<CartPage />} />
               <Route path="/checkout" element={<CheckoutPage />} />
