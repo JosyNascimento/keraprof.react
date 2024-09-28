@@ -170,12 +170,13 @@ const ProductDetailPage: React.FC = () => {
 
               <Box mt={2}>
   <AddToCartButton
-    item={{
-      ...product,
-      description: product.descrição 
-    }}
-    quantity={quantity}
-  />
+item={{
+  ...product,
+  id: parseInt(product.id), // Converte para número, se necessário
+  description: product.descrição
+}}
+quantity={quantity}
+/>
 </Box>
             </CardContent>
           </Card>
