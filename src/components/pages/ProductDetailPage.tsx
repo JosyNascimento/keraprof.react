@@ -10,21 +10,21 @@ import {
   CardContent
 } from '@mui/material';
 import { ArrowBack } from '@mui/icons-material';
-import { db } from '../../firebase'; // Import your Firebase configuration
+import { db } from '../../firebase';
 import { collection, getDocs } from 'firebase/firestore';
 import AddToCartButton from '../Cart/AddToCartButton';
 
-// Definição das interfaces
+
 // Definição das interfaces
 interface Item {
-  id: string; // Alterado para string se os IDs forem strings
+  id: string; 
   title: string;
-  price: string; // Mantendo como string, pois você tem "129.9"
-  descrição: string; // Deixe como 'descrição' se este for o nome no Firebase
+  price: string; 
+  descrição: string; 
   imageUrl: string;
   stock: number;
   destaque: boolean;
-  description?: string; // Adicionando 'description' se o AddToCartButton precisar
+  description?: string; // Adicionando  se o AddToCartButton precisar
 }
 
 interface Category {
@@ -89,7 +89,7 @@ const ProductDetailPage: React.FC = () => {
     return <Typography variant="h6">Produto não encontrado ou carregando...</Typography>;
   }
 
-  const price = parseFloat(product.price); // Converter para número
+  const price = parseFloat(product.price); // Convertendo para número
   const totalPrice = price * quantity;
 
   return (
@@ -172,7 +172,7 @@ const ProductDetailPage: React.FC = () => {
   <AddToCartButton
     item={{
       ...product,
-      description: product.descrição // Convertendo 'descrição' para 'description'
+      description: product.descrição 
     }}
     quantity={quantity}
   />
