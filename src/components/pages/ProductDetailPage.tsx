@@ -7,24 +7,23 @@ import {
   TextField,
   Grid,
   Card,
-  CardContent
+  CardContent,
 } from '@mui/material';
 import { ArrowBack } from '@mui/icons-material';
 import { db } from '../../firebase';
 import { collection, getDocs } from 'firebase/firestore';
 import AddToCartButton from '../Cart/AddToCartButton';
 
-
 // Definição das interfaces
 interface Item {
-  id: string; 
+  id: string;
   title: string;
-  price: string; 
-  descrição: string; 
+  price: string;
+  descrição: string;
   imageUrl: string;
   stock: number;
   destaque: boolean;
-  description?: string; // Adicionando  se o AddToCartButton precisar
+  imageUrls?: string[];
 }
 
 interface Category {
@@ -32,7 +31,6 @@ interface Category {
   title: string;
   items: Item[];
 }
-
 
 const calculateFreight = (cep: string) => {
   const freightRates: { [key: string]: number } = {
@@ -47,12 +45,13 @@ const calculateFreight = (cep: string) => {
 };
 
 const ProductDetailPage: React.FC = () => {
+  const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const [product, setProduct] = useState<Item | null>(null);
   const [quantity, setQuantity] = useState(1);
   const [cep, setCep] = useState('');
   const [freight, setFreight] = useState<number | null>(null);
-  const navigate = useNavigate();
+  const [selectedImage, setSelectedImage] = useState('');
 
   useEffect(() => {
     const loadProduct = async () => {
@@ -61,13 +60,14 @@ const ProductDetailPage: React.FC = () => {
         const categoriesSnap = await getDocs(categoriesRef);
         const categories = categoriesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() })) as Category[];
 
-        // Encontrar o produto correspondente ao id
         const foundProduct = categories.flatMap(category => 
-          category.items?.filter(item => item.id === id) || []
+          category.items?.filter((item: Item) => item.id === id) || []
         )[0];
 
         if (foundProduct) {
-          setProduct(foundProduct);
+          const imageUrls = foundProduct.imageUrls || [];
+          setProduct({ ...foundProduct, imageUrls });
+          setSelectedImage(foundProduct.imageUrl);
         } else {
           console.error("Produto não encontrado!");
         }
@@ -85,12 +85,16 @@ const ProductDetailPage: React.FC = () => {
     setFreight(freightValue);
   };
 
+  const handleThumbnailClick = (imageUrl: string) => {
+    setSelectedImage(imageUrl);
+  };
+
   if (!product) {
     return <Typography variant="h6">Produto não encontrado ou carregando...</Typography>;
   }
 
-  const price = parseFloat(product.price); // Convertendo para número
-  const totalPrice = price * quantity;
+  const price = product.price; 
+  const totalPrice = (parseFloat(price) * quantity).toFixed(2); 
 
   return (
     <Box p={3}>
@@ -119,22 +123,54 @@ const ProductDetailPage: React.FC = () => {
 
       <Grid container spacing={3}>
         <Grid item xs={12} sm={4}>
-          <img 
-            src={product.imageUrl} 
-            alt={product.title} 
-            style={{ width: '100%', cursor: 'pointer' }} 
-          />
+          <Box position="relative">
+            <img 
+              src={selectedImage} 
+              alt={product.title} 
+              style={{ 
+                width: '100%', 
+                height: '600px', 
+                objectFit: 'cover', 
+                marginBottom: '8px', 
+                cursor: 'pointer' 
+              }} 
+            />
+            {product.imageUrls && product.imageUrls.length > 0 && (
+              <Box display="flex" flexWrap="wrap">
+                {product.imageUrls.map((url, index) => (
+                  <img 
+                    key={index}
+                    src={url} 
+                    alt={`${product.title} ${index + 1}`} 
+                    style={{ 
+                      width: '30%', 
+                      height: '100px', 
+                      objectFit: 'cover', 
+                      margin: '4px', 
+                      cursor: 'pointer' 
+                    }} 
+                    onClick={() => handleThumbnailClick(url)} 
+                  />
+                ))}
+              </Box>
+            )}
+          </Box>
         </Grid>
 
         <Grid item xs={12} sm={8}>
           <Card>
             <CardContent>
-              <Typography variant="h5">{product.title}</Typography>
+              <Typography 
+                variant="h4" 
+                style={{ color: 'deeppink', paddingBottom: '16px' }}
+              >
+                {product.title}
+              </Typography>
               <Typography variant="body1" color="textSecondary" gutterBottom>
                 {product.descrição}
               </Typography>
               <Typography variant="h4" style={{ color: 'deeppink' }}>
-                Preço: R${price.toFixed(2)}
+                Preço: R${price}
               </Typography>
 
               <Box mt={2}>
@@ -144,7 +180,7 @@ const ProductDetailPage: React.FC = () => {
               </Box>
 
               <Typography variant="h6" mt={2}>
-                Total: R${totalPrice.toFixed(2)}
+                Total: R${totalPrice}
               </Typography>
 
               <Box mt={2}>
@@ -169,15 +205,15 @@ const ProductDetailPage: React.FC = () => {
               </Box>
 
               <Box mt={2}>
-  <AddToCartButton
-item={{
-  ...product,
-  id: parseInt(product.id), // Converte para número, se necessário
-  description: product.descrição
-}}
-quantity={quantity}
-/>
-</Box>
+                <AddToCartButton
+                  item={{
+                    ...product,
+                    id: parseInt(product.id),
+                    description: product.descrição,
+                  }}
+                  quantity={quantity}
+                />
+              </Box>
             </CardContent>
           </Card>
         </Grid>
