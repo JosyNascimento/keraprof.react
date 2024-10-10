@@ -1,5 +1,3 @@
-// src/components/Footer/Footer.tsx
-
 import React, { useState } from 'react';
 import { Box, Typography, Link, Grid, Button, TextField } from '@mui/material';
 import { WhatsApp } from '@mui/icons-material';
@@ -17,7 +15,7 @@ const Footer: React.FC = () => {
   };
 
   return (
-    <footer>
+    <footer style={{ width: '100vw', margin: 0, padding: 0 }}> {/* Garantir 100% da largura da página */}
       <Box
         sx={{
           border: '2px solid pink',
@@ -27,7 +25,7 @@ const Footer: React.FC = () => {
           width: '100%', // 100% da largura
           boxSizing: 'border-box',
           marginTop: '4rem', // Espaço superior
-          paddingTop: '3rem' // Padding superior de 3rem
+          paddingTop: '3rem', // Padding superior de 3rem
         }}
       >
         <Typography
@@ -38,7 +36,7 @@ const Footer: React.FC = () => {
             padding: '8px',
             textAlign: 'center',
             borderRadius: '4px',
-            marginBottom: '16px' // Espaçamento inferior
+            marginBottom: '16px', // Espaçamento inferior
           }}
         >
           Cadastre-se para ofertas exclusivas
@@ -60,15 +58,15 @@ const Footer: React.FC = () => {
               '& .MuiOutlinedInput-root.Mui-focused': {
                 '& fieldset': {
                   borderColor: 'pink', // Borda rosa quando em foco
-                }
+                },
               },
               '& .MuiOutlinedInput-input': {
                 paddingRight: '0', // Remove o padding interno direito para encaixar o botão
                 '&::placeholder': {
                   color: 'pink', // Cor do texto do placeholder
-                  opacity: 1 // Garante que a cor seja visível
-                }
-              }
+                  opacity: 1, // Garante que a cor seja visível
+                },
+              },
             }}
           />
           <Button
@@ -77,11 +75,11 @@ const Footer: React.FC = () => {
               backgroundColor: '#B5A642', // Cor de fundo dourada
               color: '#fff', // Cor do texto branco
               '&:hover': {
-                backgroundColor: '#ff66b2' // Cor rosa mais clara ao passar o mouse
+                backgroundColor: '#ff66b2', // Cor rosa mais clara ao passar o mouse
               },
               height: '100%', // Garante que o botão tenha a mesma altura do campo de texto
               marginLeft: '-2px', // Remove o espaço entre o campo de texto e o botão
-              borderRadius: '0 4px 4px 0' // Mantém o botão alinhado com o campo de texto
+              borderRadius: '0 4px 4px 0', // Mantém o botão alinhado com o campo de texto
             }}
             onClick={handleSubscribe}
           >
@@ -119,8 +117,9 @@ const Footer: React.FC = () => {
         backgroundColor: '#d87dab', // Cor do fundo do rodapé
         padding: 3,
         textAlign: 'center',
-        width: '100%',
-        marginTop: '20px'
+        width: '100%', // Garantindo 100% da largura
+        marginTop: '20px',
+        boxSizing: 'border-box', // Incluindo padding e border nas dimensões
       }}>
         <Typography variant="body1" color="white">
           © 2024 KeraProf. Todos os direitos reservados.

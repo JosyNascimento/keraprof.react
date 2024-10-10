@@ -11,7 +11,6 @@ import caminhaoImg from '../../assets/img/caminhão.png';
 import { Box, Container } from '@mui/material';
 import Catalog from '../ProductCatalog/Catalog';
 
-
 const HomePage: React.FC = () => {
   const settings = {
     infinite: true,
@@ -24,7 +23,7 @@ const HomePage: React.FC = () => {
 
   return (
     <div>
-      <div style={{ width: '100%', maxWidth: '100vw', marginBottom: '2rem' }}>
+      <div style={{ width: '100vw', marginBottom: '2rem', overflow: 'hidden' }}> {/* Ajustado para 100vw */}
         <Slider {...settings}>
           <div>
             <img
@@ -57,13 +56,13 @@ const HomePage: React.FC = () => {
         <div className="container">
           <Box display="flex" justifyContent="space-between" alignItems="center" flexWrap="wrap">
             {/* Primeir ao Quarto Bloco */}
-            {[
+            {[ 
               { img: caixaImg, title: 'Os melhores produtos', subtitle: 'Você encontra aqui!' },
               { img: cartaoImg, title: 'Parcele com cartão', subtitle: 'Pague em até 10x' },
               { img: caminhaoImg, title: 'Entrega rápida', subtitle: 'em todo o Brasil' },
               { img: qualidadeImg, title: 'Satisfação garantida', subtitle: 'ou seu dinheiro de volta' },
             ].map((item, index) => (
-              <div key={index} className="box-content flex" style={{ display: 'flex', alignItems: 'center', padding: '1rem ' }}>
+              <div key={index} className="box-content flex" style={{ display: 'flex', alignItems: 'center', padding: '1rem' }}>
                 <div className="box-img" style={{ padding: '0.5rem', borderRadius: '8px' }}>
                   <img src={item.img} alt={item.title} style={{ width: '48px', height: '48px', margin: '1rem' }} />
                 </div>

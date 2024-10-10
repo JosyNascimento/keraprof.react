@@ -1,10 +1,16 @@
-// src/components/NavBar/SearchBar.tsx
-import React, { useState, useEffect, ChangeEvent, MouseEvent, KeyboardEvent } from 'react';
+import React, { useState, useEffect, ChangeEvent, KeyboardEvent } from 'react';
 import SearchIcon from '@mui/icons-material/Search';
+import PersonIcon from '@mui/icons-material/Person';
 import { styled } from '@mui/material/styles';
 import { searchProducts, Product } from '../../services/productService';
 
 // Estilização dos componentes
+const SearchContainer = styled('div')(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  width: '100%',
+}));
+
 const SearchWrapper = styled('div')(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
@@ -13,10 +19,7 @@ const SearchWrapper = styled('div')(({ theme }) => ({
   borderRadius: '4px',
   backgroundColor: '#fff',
   width: '100%',
-  maxWidth: '600px',
-  [theme.breakpoints.up('md')]: {
-    maxWidth: '800px',
-  },
+  maxWidth: '400px',
   boxSizing: 'border-box',
   transition: 'box-shadow 0.3s ease',
 }));
@@ -41,6 +44,19 @@ const SearchIconWrapper = styled('div')(({ theme }) => ({
   cursor: 'pointer',
 }));
 
+const LoginWrapper = styled('div')(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  marginLeft: '16px',
+  color: '#fff',
+  fontSize: '16px',
+  position: 'relative',
+}));
+
+const PersonIconWrapper = styled(PersonIcon)(({ theme }) => ({
+  color: '#fff',
+}));
+
 const SuggestionsList = styled('ul')(({ theme }) => ({
   position: 'absolute',
   top: '100%',
@@ -62,7 +78,7 @@ const SuggestionItem = styled('li')<{ selected?: boolean }>(({ selected }) => ({
   padding: '8px',
   cursor: 'pointer',
   backgroundColor: selected ? '#f0f0f0' : 'inherit',
-  color: 'black', // Define a cor preta para o texto
+  color: 'black',
   '&:hover': {
     backgroundColor: '#f0f0f0',
   },
@@ -77,6 +93,51 @@ const NoResults = styled('div')(({ theme }) => ({
   color: '#f00',
 }));
 
+const LoginPopup = styled('div')(({ theme }) => ({
+  position: 'absolute',
+  top: '100%',
+  left: 0,
+  right: 0,
+  backgroundColor: '#fff',
+  border: '1px solid #ccc',
+  borderRadius: '4px',
+  boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+  zIndex: 100,
+  padding: '10px',
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'flex-start',
+}));
+
+const AccountMessage = styled('div')(({ theme }) => ({
+  marginBottom: '8px',
+  fontSize: '14px',
+  color: '#333',
+}));
+
+const ButtonContainer = styled('div')(({ theme }) => ({
+  display: 'flex',
+  justifyContent: 'space-between',
+  width: '100%', // Faz os botões ocuparem o espaço total
+}));
+
+const Button = styled('a')<{ outlined?: boolean }>(({ theme, outlined }) => ({
+  flex: 1, // Faz os botões terem o mesmo tamanho
+  marginTop: '8px',
+  padding: '10px 16px',
+  backgroundColor: outlined ? 'transparent' : 'deeppink',
+  color: outlined ? 'deeppink' : '#fff',
+  textDecoration: 'none',
+  borderRadius: '4px',
+  border: outlined ? '2px solid deeppink' : 'none',
+  transition: 'background-color 0.3s, color 0.3s',
+  '&:hover': {
+    backgroundColor: outlined ? 'deeppink' : '#d85e95',
+    color: outlined ? '#fff' : '#fff',
+  },
+  marginLeft: outlined ? '8px' : '0', // Espaçamento entre os botões
+}));
+
 interface SearchBarProps {
   isMobile?: boolean;
   onSearchResults: (results: Product[]) => void;
@@ -88,8 +149,8 @@ const SearchBar: React.FC<SearchBarProps> = ({ isMobile, onSearchResults }) => {
   const [noResults, setNoResults] = useState(false);
   const [suggestions, setSuggestions] = useState<Product[]>([]);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+  const [showLoginPopup, setShowLoginPopup] = useState(false);
 
-  // Função para realizar a busca
   const fetchResults = async () => {
     setLoading(true);
     setNoResults(false);
@@ -132,7 +193,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ isMobile, onSearchResults }) => {
   };
 
   const handleSuggestionClick = (product: Product) => {
-    setQuery(product.title); // Ajuste conforme o formato dos seus produtos
+    setQuery(product.title);
     setSuggestions([]);
     fetchResults();
   };
@@ -153,33 +214,57 @@ const SearchBar: React.FC<SearchBarProps> = ({ isMobile, onSearchResults }) => {
   };
 
   return (
-    <SearchWrapper>
-      <Input
-        type="text"
-        placeholder="Buscar produtos..."
-        value={query}
-        onChange={handleInputChange}
-        onKeyDown={handleKeyDown}
-      />
-      <SearchIconWrapper onClick={handleSearchClick}>
-        <SearchIcon />
-      </SearchIconWrapper>
-      {loading && <LoadingIndicator>Loading...</LoadingIndicator>}
-      {noResults && <NoResults>Nenhum resultado encontrado</NoResults>}
-      {suggestions.length > 0 && (
-        <SuggestionsList>
-          {suggestions.map((product, index) => (
-            <SuggestionItem
-              key={product.id} // Assumindo que cada produto tem um ID único
-              selected={index === selectedIndex}
-              onClick={() => handleSuggestionClick(product)}
-            >
-              {product.title} {/* Ajuste conforme o formato dos seus produtos */}
-            </SuggestionItem>
-          ))}
-        </SuggestionsList>
-      )}
-    </SearchWrapper>
+    <SearchContainer>
+      <SearchWrapper>
+        <Input
+          type="text"
+          placeholder="Buscar produtos..."
+          value={query}
+          onChange={handleInputChange}
+          onKeyDown={handleKeyDown}
+        />
+        <SearchIconWrapper onClick={handleSearchClick}>
+          <SearchIcon />
+        </SearchIconWrapper>
+        {loading && <LoadingIndicator>Loading...</LoadingIndicator>}
+        {noResults && <NoResults>Nenhum resultado encontrado</NoResults>}
+        {suggestions.length > 0 && (
+          <SuggestionsList>
+            {suggestions.map((product, index) => (
+              <SuggestionItem
+                key={product.id} 
+                selected={index === selectedIndex}
+                onClick={() => handleSuggestionClick(product)}
+              >
+                {product.title} 
+              </SuggestionItem>
+            ))}
+          </SuggestionsList>
+        )}
+      </SearchWrapper>
+      <LoginWrapper
+        onMouseEnter={() => setShowLoginPopup(true)}
+        onMouseLeave={() => setShowLoginPopup(false)}
+      >
+        <PersonIconWrapper />
+        <a href="/login" style={{ marginLeft: '8px', color: '#fff', textDecoration: 'none' }}>
+          Olá, faça seu login ou cadastre-se
+        </a>
+        {showLoginPopup && (
+          <LoginPopup>
+            <AccountMessage>
+              Para ver seus pedidos e ter uma experiência personalizada, acesse sua conta :)
+            </AccountMessage>
+            <ButtonContainer>
+              <Button href="/login">Login</Button>
+              <Button href="/register" outlined>
+                Cadastrar
+              </Button>
+            </ButtonContainer>
+          </LoginPopup>
+        )}
+      </LoginWrapper>
+    </SearchContainer>
   );
 };
 

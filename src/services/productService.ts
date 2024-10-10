@@ -30,7 +30,7 @@ export const fetchProducts = async (): Promise<Product[]> => {
           { 
             id: 2, 
             title: 'Zen Hair Plástica Dos Fios 4d Escova Progressiva 2x1000ml',
-            imageUrl: 'https://firebasestorage.googleapis.com/v0/b/keraprofreact.appspot.com/o/zen%20hair%2Fescova%20zen.webp?alt=media&token=ca170c1d-fb02-43cc-89a4-01671f0613b8',
+            imageUrl: 'https://firebasestorage.googleapis.com/v0/b/keraprofreact.appspot.com/o/zen%20hair%2Fzem%20hair.webp?alt=media&token=4924b3f3-da65-44d6-ad3d-24917dfbbf98',
             price: 'R$ 129,85',
             description: 'Zen Hair Plástica Dos Fios 4d Escova Progressiva 2x1000ml Plástica dos Fios Zen: Desenvolvido Com hidratantes poderosos e eficazes fio a fio nos cabelos, tornando-os saudáveis, macios e com brilho intenso e duradouro. Reconstroi e salva os cabelos dos danos causados pelo sol, água do mar, areia, vento. A Plástica Capilar nutre o cabelo dando um banho de queratina, fechando as cutículas dos fios e revitaliza os fios dando aos cabelos brilhoso e sedosidade da raiz as pontas. Escova Progressiva Zen Hair Plática dos Fios Contém: 01- Shampoo Limpeza Intensa (passo 1) 01- Redutor De Queratina (passo 2) Conselho de Aplicação: Passo 1 ? Com o Shampoo limpeza profunda Zen 4D, lave os cabelos, caso sinta necessidade lave mais uma vez e deixe agir de 5 à 10 minutos, após esta etapa seque os cabelos por completo, desta forma atingirá um resultado melhor ao aplicar o tratamento. Passo 2 ? Após aplicar o tratamento em mechas pequenas seque os cabelos fazendo uma escova lisa, para ter um liso perfeito é necessário escovar até 10 vezes cada mecha e finalizar com a prancha mecha a mecha. Resultado: Cabelos lisos, macios hidratados, com volume reduzido e sem frizz. Fios mais saudáveis! Cuidados: Manter fora do alcance das crianças. Em caso de contato com os olhos lavar abundantemente com água. Em caso de irritação suspenda o uso e procure um médico. Manter em local fresco Contém: 01- Shampoo Limpeza Intensa (passo 1) 01- Redutor De Queratina (passo 2)',
             images: [
@@ -112,3 +112,5 @@ export const searchProducts = async (query: string): Promise<Product[]> => {
     return [];
   }
 };
+
+

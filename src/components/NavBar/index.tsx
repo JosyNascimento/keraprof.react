@@ -10,6 +10,7 @@ import HomeIcon from "@mui/icons-material/Home";
 import { Link, useNavigate } from "react-router-dom";
 import { db } from '../../firebase';
 import { collection, getDocs } from 'firebase/firestore';
+import { Product } from '../../services/productService'; // Ajuste o caminho conforme necessário
 
 // Interfaces
 interface Item {
@@ -28,6 +29,7 @@ const NavBar = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [cartDrawerOpen, setCartDrawerOpen] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
+  const [searchResults, setSearchResults] = useState<Product[]>([]); // Ajuste aqui para Product[]
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -56,6 +58,13 @@ const NavBar = () => {
 
   const handleSubCategoryClick = (id: string) => {
     navigate(`/product/${id}`);
+  };
+
+  // Função para lidar com os resultados da busca
+  const handleSearchResults = (results: Product[]) => { // Ajuste aqui para Product[]
+    setSearchResults(results);
+    console.log("Resultados da busca:", results);
+    // Aqui você pode redirecionar para uma página de resultados se necessário
   };
 
   return (
@@ -92,7 +101,7 @@ const NavBar = () => {
           <Box sx={{ flexGrow: 2, display: "flex", justifyContent: "center" }}>
             <Box sx={{ width: isMobile ? "90%" : "100%" }}>
               <SearchBar
-                onSearchResults={(results) => console.log(results)}
+                onSearchResults={handleSearchResults} // Passa a função que atualiza os resultados de busca
                 isMobile={isMobile}
               />
             </Box>
@@ -117,7 +126,7 @@ const NavBar = () => {
               >
                 <Box sx={{ display: "flex", flexDirection: "column", padding: 2 }}>
                   <SearchBar
-                    onSearchResults={(results) => console.log(results)}
+                    onSearchResults={handleSearchResults} // Passa a função para a Drawer também
                     isMobile={isMobile}
                   />
                   {categories.map((category) => (
