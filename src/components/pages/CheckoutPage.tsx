@@ -21,11 +21,11 @@ const CheckoutPage: React.FC = () => {
       alert('Por favor, preencha todos os campos obrigatórios.');
       return;
     }
-    navigate('/payment'); // Navegar para a página de pagamento
+    navigate('/payment'); // Navega para a página de pagamento
   };
 
   const handleContinueShopping = () => {
-    navigate('/'); // Navegar para a página inicial
+    navigate('/'); // Navega para a página inicial
   };
 
   return (

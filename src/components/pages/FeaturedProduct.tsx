@@ -77,7 +77,7 @@ const FeaturedProduct: React.FC = () => {
   const renderDescription = (description: string) => {
     return description.split('.').map((para, index) => (
       <Typography key={index} variant="body1" color="textSecondary" gutterBottom sx={{ textAlign: 'justify' }}>
-        {para.trim()}{index < description.split('.').length - 1 && '.'} {/* Adiciona o ponto final novamente, exceto no último parágrafo */}
+        {para.trim()}{index < description.split('.').length - 1 && '.'} 
       </Typography>
     ));
   };

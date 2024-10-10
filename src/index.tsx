@@ -32,7 +32,7 @@ root.render(
               <Route path="/cart" element={<CartPage />} />
               <Route path="/checkout" element={<CheckoutPage />} />
               <Route path="/product/:id" element={<ProductDetailPage />} /> 
-              <Route path="/featured-product/:id" element={<FeaturedProduct />} /> {/* Corrigido para coincidir com o CardComponent */}
+              <Route path="/featured-product/:id" element={<FeaturedProduct />} />
               <Route path="/payment" element={<PaymentPage />} />
               <Route path="/payment-confirmation" element={<PaymentConfirmation/>} />
               <Route path="/my-orders" element={<MyOrdersPage />} />

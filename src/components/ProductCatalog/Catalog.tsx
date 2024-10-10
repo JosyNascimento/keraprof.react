@@ -23,7 +23,7 @@ const Catalog: React.FC = () => {
     const loadProducts = async () => {
       try {
         const data = await fetchProducts();
-        console.log("Produtos carregados:", data); // Debug: verificar dados carregados
+        console.log("Produtos carregados:", data); // Debug: verifica dados carregados
         setProducts(data);
       } catch (err) {
         console.error("Erro ao carregar produtos:", err); // Debug: log do erro

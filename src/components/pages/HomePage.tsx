@@ -10,7 +10,7 @@ import cartaoImg from '../../assets/img/cartão.png';
 import caminhaoImg from '../../assets/img/caminhão.png';
 import { Box, Container } from '@mui/material';
 import Catalog from '../ProductCatalog/Catalog';
-import { Link } from 'react-router-dom';
+
 
 const HomePage: React.FC = () => {
   const settings = {
@@ -56,7 +56,7 @@ const HomePage: React.FC = () => {
       <div className="line-content">
         <div className="container">
           <Box display="flex" justifyContent="space-between" alignItems="center" flexWrap="wrap">
-            {/* Primeira a Quarta Blocos */}
+            {/* Primeir ao Quarto Bloco */}
             {[
               { img: caixaImg, title: 'Os melhores produtos', subtitle: 'Você encontra aqui!' },
               { img: cartaoImg, title: 'Parcele com cartão', subtitle: 'Pague em até 10x' },
