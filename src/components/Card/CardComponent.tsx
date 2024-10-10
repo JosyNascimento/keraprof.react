@@ -1,4 +1,4 @@
-//src>card>cardcomponent.tsx  
+// src/card/CardComponent.tsx
 
 import React from 'react';
 import { Link } from 'react-router-dom';
@@ -81,20 +81,20 @@ const CardComponent: React.FC<CardComponentProps> = ({ id, title, subtitle, imgS
           </Typography>
         </Box>
         <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-        <Button
-  component={Link}
-  to={`/detail/${id}`}  // Altere aqui para coincidir com a rota correta
-  variant="contained"
-  color="secondary"
-  onClick={onDetailsClick}
-  sx={{
-    backgroundColor: '#e91e63',
-    '&:hover': { backgroundColor: '#c2185b' },
-    padding: '8px 16px'
-  }}
->
-  Ver Produto
-</Button>
+          <Button
+            component={Link}
+            to={`/featured-product/${id}`}  // Altere aqui para coincidir com a rota correta
+            variant="contained"
+            color="secondary"
+            onClick={onDetailsClick}
+            sx={{
+              backgroundColor: '#e91e63',
+              '&:hover': { backgroundColor: '#c2185b' },
+              padding: '8px 16px'
+            }}
+          >
+            Ver Produto
+          </Button>
         </Box>
       </CardContent>
     </MuiCard>

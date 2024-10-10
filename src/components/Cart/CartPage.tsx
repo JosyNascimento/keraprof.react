@@ -31,11 +31,15 @@ const CartPage: React.FC = () => {
         >
           <ArrowBackIcon fontSize="large" />
         </IconButton>
-        <Typography variant="h4">Carrinho</Typography> {/* Atualizado o título para "Carrinho" */}
+        {/* Título "Carrinho" em dourado */}
+        <Typography variant="h4" sx={{ color: '#B5A642;' }}>
+          Carrinho
+        </Typography> 
       </Box>
       
       <Box sx={{ padding: 2 }}>
-        <Typography variant="h4" gutterBottom>
+        {/* "Seu Carrinho" em deeppink */}
+        <Typography variant="h4" sx={{ color: 'deeppink' }} gutterBottom>
           Seu Carrinho
         </Typography>
         {cart.length === 0 ? (
@@ -47,11 +51,22 @@ const CartPage: React.FC = () => {
                 <Typography variant="h6">{item.title}</Typography>
                 <Typography variant="body1">Quantidade: {item.quantity}</Typography>
                 <Typography variant="body1">Preço: {item.price}</Typography>
-                <Button onClick={() => removeFromCart(item.id)}>Remover</Button>
+                {/* Estilo personalizado para o botão Remover */}
+                <Button 
+                  onClick={() => removeFromCart(item.id)} 
+                  sx={{ color: 'deeppink', '&:hover': { color: 'darkmagenta' }}}
+                >
+                  Remover
+                </Button>
                 <Divider sx={{ marginY: 1 }} />
               </Box>
             ))}
-            <Button variant="contained" color="primary" onClick={handleCheckout}>
+            {/* Estilo personalizado para o botão Finalizar Compra */}
+            <Button 
+              variant="contained" 
+              sx={{ backgroundColor: 'deeppink', color: 'white', '&:hover': { backgroundColor: 'lightpink' } }} 
+              onClick={handleCheckout}
+            >
               Finalizar Compra
             </Button>
           </>

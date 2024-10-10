@@ -1,20 +1,27 @@
+// src/components/pages/ForeverLiss.tsx
+
 import React, { useState } from 'react';
 import { Box, Typography, Button, Card, CardContent, IconButton } from '@mui/material';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack'; // Importando corretamente o ArrowBackIcon
-import { useNavigate } from 'react-router-dom'; // Importando useNavigate para navegação
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { useNavigate, useParams } from 'react-router-dom';
 import AddToCartButton from '../Cart/AddToCartButton';
 
-const EscovaEmGel: React.FC = () => {
+const ForeverLiss: React.FC = () => {
+  const { id } = useParams(); // Obter o ID da URL
   const [quantity, setQuantity] = useState(1);
-  const navigate = useNavigate(); // Inicializando useNavigate
+  const navigate = useNavigate();
 
-  // Simulação de dados do produto com imageUrl
+  // Simulação de dados do produto
   const product = {
-    id: 1,
-    title: 'Escova em Gel',
-    description: 'Descrição detalhada da Escova em Gel.',
-    price: 'R$ 50,00',
-    imageUrl: 'https://via.placeholder.com/150'  // Adicione uma URL de imagem fictícia ou real
+    id: Number(id), // Usar o ID da URL
+    title: 'Kit Escova Semi Definitiva Zero 2x1Litro Forever Liss',
+    description: 'A Escova Semi Definitiva Forever Liss é adorada e desejada entre os profissionais da beleza: ...',
+    price: 'R$ 165,45',
+    images: [
+      'https://firebasestorage.googleapis.com/v0/b/keraprofreact.appspot.com/o/forever%20liss%2Fforeverliss.webp?alt=media&token=3c36e1e4-c66b-45e4-9acb-ad7f0cb06e21',
+      'https://firebasestorage.googleapis.com/v0/b/keraprofreact.appspot.com/o/forever%20liss%2Fforeverliss2.webp?alt=media&token=c5020629-41b5-4d5d-9864-839ecdd9b793',
+      'https://firebasestorage.googleapis.com/v0/b/keraprofreact.appspot.com/o/forever%20liss%2Fforeverlis%201.webp?alt=media&token=9aec61c0-39e9-49e6-b2eb-4639c5aecd60'
+    ]
   };
 
   const handleAdd = () => setQuantity(quantity + 1);
@@ -31,20 +38,19 @@ const EscovaEmGel: React.FC = () => {
 
   return (
     <Box p={3}>
-      {/* Botões de Navegação */}
       <Box mb={2} display="flex" alignItems="center">
-      <IconButton 
-  onClick={() => navigate('/')} //homepage
-  size="large"
-  aria-label="Voltar"
-  sx={{ 
-    color: 'deeppink', 
-    '&:hover': { color: 'darkmagenta' }, 
-    marginRight: 2
-  }}
->
-  <ArrowBackIcon fontSize="large" />
-</IconButton>
+        <IconButton 
+          onClick={() => navigate('/')}
+          size="large"
+          aria-label="Voltar"
+          sx={{ 
+            color: 'deeppink', 
+            '&:hover': { color: 'darkmagenta' }, 
+            marginRight: 2
+          }}
+        >
+          <ArrowBackIcon fontSize="large" />
+        </IconButton>
         <Typography variant="h4">Detalhes do Produto</Typography>
       </Box>
       
@@ -70,9 +76,9 @@ const EscovaEmGel: React.FC = () => {
 
           <Box mt={2}>
             <AddToCartButton 
-              item={product} 
+              item={{ ...product, imageUrl: product.images[0] }} // Passando a primeira imagem
               quantity={quantity} 
-              style={{ backgroundColor: 'deeppink', color: 'white' }} // Aplicando estilo
+              style={{ backgroundColor: 'deeppink', color: 'white' }}
             />
           </Box>
         </CardContent>
@@ -81,4 +87,4 @@ const EscovaEmGel: React.FC = () => {
   );
 };
 
-export default EscovaEmGel;
+export default ForeverLiss;

@@ -27,7 +27,7 @@ const MenuItem: React.FC<MenuItemProps> = ({ title, subItems, onSubItemClick }) 
 
   return (
     <div>
-      <Button onClick={handleClick} sx={{ color: 'white' }}>
+      <Button onClick={handleClick} sx={{ color: 'white', fontSize: '1.2rem' }}>
         {title}
       </Button>
       <Menu
@@ -45,6 +45,7 @@ const MenuItem: React.FC<MenuItemProps> = ({ title, subItems, onSubItemClick }) 
                 onSubItemClick(item.id); // Chama a função passada
               }
             }}
+            sx={{ margin: '5px 0', fontSize: '1rem' }} // Aumenta a fonte e adiciona espaçamento
           >
             <Link to={item.link} style={{ textDecoration: 'none', color: 'inherit' }}>
               {item.title}

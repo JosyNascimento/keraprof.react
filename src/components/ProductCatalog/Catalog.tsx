@@ -1,5 +1,3 @@
-// src/components/ProductCatalog/Catalog.tsx
-
 import React, { useEffect, useState } from 'react';
 import { Box, Typography, CircularProgress } from '@mui/material';
 import Slider from 'react-slick';
@@ -9,7 +7,6 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css'; 
 import './Catalog.css';
 
-//estrutura real dos produtos
 interface Product {
   id: number;
   title: string;
@@ -26,8 +23,10 @@ const Catalog: React.FC = () => {
     const loadProducts = async () => {
       try {
         const data = await fetchProducts();
+        console.log("Produtos carregados:", data); // Debug: verificar dados carregados
         setProducts(data);
       } catch (err) {
+        console.error("Erro ao carregar produtos:", err); // Debug: log do erro
         setError('Erro ao carregar produtos');
       } finally {
         setLoading(false);
@@ -39,7 +38,6 @@ const Catalog: React.FC = () => {
 
   if (loading) return <CircularProgress />;
   if (error) return <Typography color="error">{error}</Typography>;
-
   if (products.length === 0) return <Typography variant="h6" align="center">Nenhum produto encontrado</Typography>;
 
   const settings = {
@@ -76,11 +74,7 @@ const Catalog: React.FC = () => {
 
   return (
     <Box p={1}>
-      <Typography
-        variant="h3"
-        align="center"
-        sx={{ mt: 4, mb: 4 }}
-      >
+      <Typography variant="h3" align="center" sx={{ mt: 4, mb: 4 }}>
         Produtos selecionados para Você
       </Typography>
 
@@ -91,7 +85,7 @@ const Catalog: React.FC = () => {
               <CardComponent
                 id={product.id}
                 title={product.title}
-                subtitle="" //string vazia aqui
+                subtitle=""
                 imgSrc={product.imageUrl}
                 price={product.price}
               />

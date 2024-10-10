@@ -1,4 +1,4 @@
-//index.tsx
+// src/index.tsx
 
 import React from 'react';
 import ReactDOM from 'react-dom/client';
@@ -12,11 +12,12 @@ import Footer from './components/Footer/Footer';
 import { CartProvider } from './components/Cart/CartContext'; 
 import CartPage from './components/Cart/CartPage';
 import CheckoutPage from './components/pages/CheckoutPage';
-import EscovaEmGel from './components/pages/EscovaEmGel';
 import ProductDetailPage from './components/pages/ProductDetailPage';
+import FeaturedProduct from './components/pages/FeaturedProduct'; 
+import PaymentPage from './components/pages/PaymentPage';
+import PaymentConfirmation from './components/pages/PaymentConfirmation';
+import MyOrdersPage from './components/pages/MyOrdersPage';
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
-
-
 
 root.render(
   <React.StrictMode>
@@ -30,8 +31,11 @@ root.render(
               <Route path="/catalog" element={<Catalog />} />
               <Route path="/cart" element={<CartPage />} />
               <Route path="/checkout" element={<CheckoutPage />} />
-              <Route path="/escova-em-gel" element={<EscovaEmGel />} />
               <Route path="/product/:id" element={<ProductDetailPage />} /> 
+              <Route path="/featured-product/:id" element={<FeaturedProduct />} /> {/* Corrigido para coincidir com o CardComponent */}
+              <Route path="/payment" element={<PaymentPage />} />
+              <Route path="/payment-confirmation" element={<PaymentConfirmation/>} />
+              <Route path="/my-orders" element={<MyOrdersPage />} />
             </Routes>
           </div>
         </div>

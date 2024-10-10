@@ -8,6 +8,7 @@ interface Product {
   description: string;
   imageUrl: string;
   price: string;
+  quantity: number; // Quantidade comprada
 }
 
 interface CartItem extends Product {
@@ -18,7 +19,7 @@ interface CartContextType {
   cart: CartItem[];
   addToCart: (item: CartItem) => void;
   removeFromCart: (id: number) => void;
-  getTotalItems: () => number;  // Nova função para obter o número total de itens
+  getTotalItems: () => number;  //total de itens
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);

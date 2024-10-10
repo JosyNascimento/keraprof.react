@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { Box, Typography, Button, TextField, Card, CardContent, FormControlLabel, Checkbox, IconButton } from '@mui/material';
+import { Box, Typography, Button, TextField, Card, CardContent, FormControlLabel, Checkbox } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useCart } from '../Cart/CartContext';
 
 const CheckoutPage: React.FC = () => {
@@ -22,24 +21,26 @@ const CheckoutPage: React.FC = () => {
       alert('Por favor, preencha todos os campos obrigatórios.');
       return;
     }
-    alert('Pedido finalizado com sucesso!');
+    navigate('/payment'); // Navegar para a página de pagamento
   };
 
   const handleContinueShopping = () => {
-    // Navegar para a página inicial
-    navigate('/'); // Atualize o caminho conforme a sua configuração de rotas
+    navigate('/'); // Navegar para a página inicial
   };
 
   return (
     <Box p={3}>
-
       <Box mb={2} display="flex" alignItems="center">
-      <Typography variant="h4">Detalhes do seu Pedido</Typography>
+        <Typography variant="h4" sx={{ color: 'deeppink' }}>
+          Detalhes do seu Pedido
+        </Typography>
       </Box>
 
       <Card>
         <CardContent>
-          <Typography variant="h6" mb={2}>Carrinho</Typography>
+          <Typography variant="h6" mb={2} sx={{ color: '#B5A642' }}>
+            Carrinho
+          </Typography>
           {cart.length === 0 ? (
             <Typography variant="body1">Seu carrinho está vazio.</Typography>
           ) : (
@@ -115,9 +116,9 @@ const CheckoutPage: React.FC = () => {
             backgroundColor: '#B5A642;', 
             color: 'white', 
             '&:hover': { backgroundColor: 'darkgrey' }, 
-            fontSize: '0.875rem', // Define o tamanho da fonte para deixar o botão menor
-            padding: '8px 16px', // Ajusta o padding para deixar o botão menor
-            minWidth: 'unset', // Remove a largura mínima padrão
+            fontSize: '0.875rem',
+            padding: '8px 16px',
+            minWidth: 'unset',
           }}
         >
           Continuar Comprando
@@ -129,9 +130,9 @@ const CheckoutPage: React.FC = () => {
             backgroundColor: 'deeppink', 
             color: 'white', 
             '&:hover': { backgroundColor: 'darkmagenta' }, 
-            fontSize: '0.875rem', // Define o tamanho da fonte para deixar o botão menor
-            padding: '8px 16px', // Ajusta o padding para deixar o botão menor
-            minWidth: 'unset', // Remove a largura mínima padrão
+            fontSize: '0.875rem',
+            padding: '8px 16px',
+            minWidth: 'unset',
           }}
         >
           Finalizar Compra
