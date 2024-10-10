@@ -166,9 +166,20 @@ const ProductDetailPage: React.FC = () => {
               >
                 {product.title}
               </Typography>
-              <Typography variant="body1" color="textSecondary" gutterBottom>
-                {product.descrição}
+
+              <Typography 
+                variant="body1" 
+                color="textSecondary" 
+                gutterBottom 
+                sx={{ textAlign: 'justify' }} // Justificando o texto
+              >
+                {product.descrição.split('.').map((sentence, index) => (
+                  <Typography key={index} variant="body1" paragraph sx={{ textAlign: 'justify' }}>
+                    {sentence.trim()}.
+                  </Typography>
+                ))}
               </Typography>
+
               <Typography variant="h4" style={{ color: 'deeppink' }}>
                 Preço: R${price}
               </Typography>
