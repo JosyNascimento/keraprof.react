@@ -1,8 +1,6 @@
-// src/components/Cart/AddToCartButton.tsx
-
 import React, { useState } from 'react';
 import { Button, Snackbar, Alert } from '@mui/material';
-import { useCart } from './CartContext'; // Ajuste o caminho conforme necessário
+import { useCart } from './CartContext';
 import { useNavigate } from 'react-router-dom';
 
 interface AddToCartButtonProps {
@@ -38,7 +36,7 @@ const AddToCartButton: React.FC<AddToCartButtonProps> = ({ item, quantity, style
     <>
       <Button
         variant="contained"
-        color="primary"
+        sx={{ backgroundColor: 'deeppink', '&:hover': { backgroundColor: 'darkmagenta' } }} // Cor do botão
         onClick={handleClick}
         style={style} // Aplica o estilo passado como prop
       >
