@@ -3,20 +3,22 @@ import { Link } from 'react-router-dom';
 import { Card as MuiCard, CardContent, CardMedia, Typography, Button, Box } from '@mui/material';
 
 interface CardComponentProps {
-  id: number;
+  id: number; 
   title: string;
   subtitle: string;
   imgSrc: string;
   price: string;
   onDetailsClick?: () => void;
+  sx?: React.CSSProperties; // Adicionando a propriedade `sx` para estilos personalizados
 }
 
-const CardComponent: React.FC<CardComponentProps> = ({ id, title, subtitle, imgSrc, price, onDetailsClick }) => {
+const CardComponent: React.FC<CardComponentProps> = ({ id, title, subtitle, imgSrc, price, onDetailsClick, sx }) => {
+  // Ajustando o tratamento do preço
   const priceValue = parseFloat(price.replace('R$', '').replace('.', '').replace(',', '.'));
 
   if (isNaN(priceValue)) {
     console.error('Erro ao converter o preço:', price);
-    return null;
+    return null; // Não renderiza o card se o preço não for válido
   }
 
   const installmentValue = (priceValue / 10).toFixed(2);
@@ -31,16 +33,22 @@ const CardComponent: React.FC<CardComponentProps> = ({ id, title, subtitle, imgS
         boxShadow: 3,
         margin: 1,
         overflow: 'hidden',
-        backgroundColor: 'white', // Define o fundo do card como branco
+        backgroundColor: 'white',
+        transition: 'transform 0.3s, box-shadow 0.3s', // Adicionando transição
+        '&:hover': {
+          transform: 'scale(1.05)', // Aumenta o tamanho do card ao passar o mouse
+          boxShadow: 6, // Aumenta a sombra do card ao passar o mouse
+        },
+        ...sx, // Adicionando estilos personalizados
       }}
     >
       <CardMedia
         component="img"
         sx={{
-          height: '300px', // Altura fixa da imagem
-          width: '100%', // Largura total do contêiner
-          objectFit: 'contain', // Ajusta a imagem para caber dentro do contêiner sem distorção
-          objectPosition: 'center', // Centraliza a imagem dentro do contêiner
+          height: '300px',
+          width: '100%',
+          objectFit: 'contain',
+          objectPosition: 'center',
         }}
         image={imgSrc}
         alt={title}

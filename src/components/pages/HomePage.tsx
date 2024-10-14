@@ -10,6 +10,8 @@ import cartaoImg from '../../assets/img/cartão.png';
 import caminhaoImg from '../../assets/img/caminhão.png';
 import { Box, Container } from '@mui/material';
 import Catalog from '../ProductCatalog/Catalog';
+import CardComponent from '../Card/CardComponent';
+import OffersSection from './OffersSection'; 
 
 const HomePage: React.FC = () => {
   const settings = {
@@ -23,7 +25,7 @@ const HomePage: React.FC = () => {
 
   return (
     <div>
-      <div style={{ width: '100vw', marginBottom: '2rem', overflow: 'hidden' }}> {/* Ajustado para 100vw */}
+      <div style={{ width: '100vw', marginBottom: '2rem', overflow: 'hidden' }}>
         <Slider {...settings}>
           <div>
             <img
@@ -79,6 +81,9 @@ const HomePage: React.FC = () => {
       <Container>
         <Catalog />
       </Container>
+
+      {/* Seção de Ofertas ao final da página */}
+      <OffersSection />
     </div>
   );
 };

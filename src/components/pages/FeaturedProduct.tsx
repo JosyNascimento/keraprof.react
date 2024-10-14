@@ -12,7 +12,8 @@ import {
 import { ArrowBack } from '@mui/icons-material';
 import { fetchProductById, Product } from '../../services/productService';
 import AddToCartButton from '../Cart/AddToCartButton';
-import { getFirestore, collection, getDocs } from 'firebase/firestore';
+import { getFirestore, collection, getDocs, doc, getDoc } from 'firebase/firestore';
+import CardComponent from '../Card/CardComponent';
 
 const calculateFreight = (cep: string) => {
   const freightRates: { [key: string]: number } = {
@@ -35,7 +36,6 @@ const FeaturedProduct: React.FC = () => {
   const [freight, setFreight] = useState<number | null>(null);
   const [selectedImage, setSelectedImage] = useState('');
   const [relatedProducts, setRelatedProducts] = useState<any[]>([]);
-  const [hoveredCard, setHoveredCard] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -57,10 +57,25 @@ const FeaturedProduct: React.FC = () => {
       
       const products = productsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       setRelatedProducts(products);
+      console.log("Produtos relacionados:", products); // Log para verificar os produtos
+    };
+
+    const fetchCareProducts = async () => {
+      const db = getFirestore();
+      const categoryRef = doc(db, 'categories', 'FIPtCofN6gsaFN3xsXAF'); // Usar o ID da categoria
+      const categorySnapshot = await getDoc(categoryRef);
+      
+      if (categorySnapshot.exists()) {
+        const categoryData = categorySnapshot.data();
+        console.log(categoryData); // Apenas para debug
+      } else {
+        console.error("Categoria não encontrada!");
+      }
     };
 
     fetchProduct();
     fetchRelatedProducts();
+    fetchCareProducts();
   }, [id]);
 
   const handleAdd = () => setQuantity(quantity + 1);
@@ -79,9 +94,11 @@ const FeaturedProduct: React.FC = () => {
     return <Typography variant="h6">Produto não encontrado ou carregando...</Typography>;
   }
 
-  const price = parseFloat(product.price.replace('R$', '').replace(',', '.').trim());
+  const rawPrice = product.price;
+  const price = typeof rawPrice === 'string' ? parseFloat(rawPrice.replace('R$', '').replace(',', '.').trim()) : rawPrice;
+
   if (isNaN(price)) {
-    return <Typography variant="h6">Preço inválido: {product.price}</Typography>;
+    return <Typography variant="h6">Preço inválido: {rawPrice}</Typography>;
   }
 
   const totalPrice = (price * quantity).toFixed(2);
@@ -173,7 +190,7 @@ const FeaturedProduct: React.FC = () => {
                 </Typography>
               )}
               <Typography variant="h4" style={{ color: 'deeppink' }}>
-                Preço: {product.price}
+                Preço: R${price.toFixed(2)}
               </Typography>
 
               <Box mt={2} display="flex" alignItems="center">
@@ -226,41 +243,25 @@ const FeaturedProduct: React.FC = () => {
         <Typography variant="h5" style={{ color: 'deeppink', paddingBottom: '16px' }}>
           Clientes Também Compraram
         </Typography>
-        <Grid container spacing={3}>
-          {relatedProducts.map((relatedProduct) => (
-            <Grid item xs={12} sm={4} key={relatedProduct.id}>
-              <Card 
-                onMouseEnter={() => setHoveredCard(relatedProduct.id)}
-                onMouseLeave={() => setHoveredCard(null)}
-                sx={{ position: 'relative', transition: 'transform 0.2s', '&:hover': { transform: 'scale(1.02)' } }}
-              >
-                <CardContent>
-                  <Box display="flex" justifyContent="center">
-                    <img 
-                      src={relatedProduct.imageUrl} 
-                      alt={relatedProduct.title} 
-                      style={{ width: '100%', height: 'auto', maxHeight: '150px', objectFit: 'contain' }} 
-                    />
-                  </Box>
-                  <Typography variant="h6" style={{ color: 'deeppink', padding: '10px 0' }}>
-                    {relatedProduct.title}
-                  </Typography>
-                  <Typography variant="body1" color="textSecondary">
-                    Preço: {relatedProduct.price}
-                  </Typography>
-                  {hoveredCard === relatedProduct.id && (
-                    <Box mt={2}>
-                      <AddToCartButton 
-                        item={{ ...relatedProduct, id: relatedProduct.id }} 
-                        quantity={1}
-                      />
-                    </Box>
-                  )}
-                </CardContent>
-              </Card>
-            </Grid>
-          ))}
-        </Grid>
+        {relatedProducts.length > 0 ? (
+          <Grid container spacing={3}>
+            {relatedProducts.map((relatedProduct) => (
+              <Grid item xs={12} sm={6} md={4} key={relatedProduct.id}>
+                <CardComponent
+                  id={relatedProduct.id}
+                  title={relatedProduct.title}
+                  subtitle={relatedProduct.subtitle}
+                  imgSrc={relatedProduct.imageUrl}
+                  price={relatedProduct.price} 
+                />
+              </Grid>
+            ))}
+
+            
+          </Grid>
+        ) : (
+          <Typography variant="h6">Nenhum produto relacionado encontrado.</Typography>
+        )}
       </Box>
     </Box>
   );

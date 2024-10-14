@@ -23,10 +23,10 @@ const Catalog: React.FC = () => {
     const loadProducts = async () => {
       try {
         const data = await fetchProducts();
-        console.log("Produtos carregados:", data); // Debug: verifica dados carregados
+        console.log("Produtos carregados:", data);
         setProducts(data);
       } catch (err) {
-        console.error("Erro ao carregar produtos:", err); // Debug: log do erro
+        console.error("Erro ao carregar produtos:", err);
         setError('Erro ao carregar produtos');
       } finally {
         setLoading(false);
@@ -74,23 +74,21 @@ const Catalog: React.FC = () => {
 
   return (
     <Box p={1}>
-      <Typography variant="h3" align="center" sx={{  mt: 4, 
-    mb: 4, 
-    color: 'deepPink', 
-    textTransform: 'uppercase' }}>
-        Produtos selecionados para Você
+      <Typography variant="h4" align="center" sx={{ mt: 4, mb: 4, color: 'black', textTransform: 'capitalize' }}>
+        Produtos Selecionados Para Você
       </Typography>
 
-      <Box sx={{ position: 'relative' }}>
+      <Box sx={{ position: 'relative', overflow: 'hidden' }}>
         <Slider {...settings}>
           {products.map(product => (
-            <div key={product.id} style={{ padding: '0 10px' }}>
+            <div key={product.id} style={{ padding: '0 5px' }}> {/* Reduzindo o padding para responsividade */}
               <CardComponent
                 id={product.id}
                 title={product.title}
                 subtitle=""
                 imgSrc={product.imageUrl}
                 price={product.price}
+                sx={{ width: '100%' }} // Certificando-se de que o card ocupa 100% da largura do contêiner
               />
             </div>
           ))}
