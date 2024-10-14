@@ -40,6 +40,7 @@ const calculateFreight = (cep: string) => {
     'ES': 18.00,
     'outros': 30.00
   };
+  
   const state = cep.slice(0, 2);
   return freightRates[state] || freightRates['outros'];
 };

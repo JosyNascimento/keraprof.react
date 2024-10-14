@@ -1,7 +1,7 @@
 // src/components/Cart/CartIcon.tsx
 
 import React from 'react';
-import { IconButton, Badge } from '@mui/material';
+import { IconButton, Badge, Tooltip } from '@mui/material';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { useCart } from './CartContext'; // Certifique-se de que o caminho está correto
 import { useNavigate } from 'react-router-dom'; // Importa o hook useNavigate
@@ -18,11 +18,13 @@ const CartIcon: React.FC = () => {
   };
 
   return (
-    <IconButton color="inherit" onClick={handleClick}>
-      <Badge badgeContent={totalItems} color="secondary">
-        <ShoppingCartIcon />
-      </Badge>
-    </IconButton>
+    <Tooltip title="Meu carrinho" arrow>
+      <IconButton color="inherit" onClick={handleClick}>
+        <Badge badgeContent={totalItems} color="secondary">
+          <ShoppingCartIcon />
+        </Badge>
+      </IconButton>
+    </Tooltip>
   );
 };
 

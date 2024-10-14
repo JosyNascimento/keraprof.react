@@ -12,6 +12,7 @@ import {
 import { ArrowBack } from '@mui/icons-material';
 import { fetchProductById, Product } from '../../services/productService';
 import AddToCartButton from '../Cart/AddToCartButton';
+import { getFirestore, collection, getDocs } from 'firebase/firestore';
 
 const calculateFreight = (cep: string) => {
   const freightRates: { [key: string]: number } = {
@@ -33,6 +34,8 @@ const FeaturedProduct: React.FC = () => {
   const [cep, setCep] = useState('');
   const [freight, setFreight] = useState<number | null>(null);
   const [selectedImage, setSelectedImage] = useState('');
+  const [relatedProducts, setRelatedProducts] = useState<any[]>([]);
+  const [hoveredCard, setHoveredCard] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -47,7 +50,17 @@ const FeaturedProduct: React.FC = () => {
       }
     };
 
+    const fetchRelatedProducts = async () => {
+      const db = getFirestore();
+      const productsCollection = collection(db, 'products');
+      const productsSnapshot = await getDocs(productsCollection);
+      
+      const products = productsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      setRelatedProducts(products);
+    };
+
     fetchProduct();
+    fetchRelatedProducts();
   }, [id]);
 
   const handleAdd = () => setQuantity(quantity + 1);
@@ -73,7 +86,6 @@ const FeaturedProduct: React.FC = () => {
 
   const totalPrice = (price * quantity).toFixed(2);
 
-  // Função para dividir a descrição em parágrafos
   const renderDescription = (description: string) => {
     return description.split('.').map((para, index) => (
       <Typography key={index} variant="body1" color="textSecondary" gutterBottom sx={{ textAlign: 'justify' }}>
@@ -122,7 +134,6 @@ const FeaturedProduct: React.FC = () => {
             />
           </Box>
 
-          {/* Renderizar as imagens adicionais */}
           <Box display="flex" justifyContent="center" mt={2}>
             {product.images.map((imageUrl, index) => (
               <img 
@@ -149,7 +160,6 @@ const FeaturedProduct: React.FC = () => {
                 {product.title}
               </Typography>
               
-              {/* Renderização da descrição com quebras de linha */}
               {renderDescription(product.description)}
 
               {product.usageInstructions && (
@@ -211,6 +221,47 @@ const FeaturedProduct: React.FC = () => {
           </Card>
         </Grid>
       </Grid>
+
+      <Box mt={5}>
+        <Typography variant="h5" style={{ color: 'deeppink', paddingBottom: '16px' }}>
+          Clientes Também Compraram
+        </Typography>
+        <Grid container spacing={3}>
+          {relatedProducts.map((relatedProduct) => (
+            <Grid item xs={12} sm={4} key={relatedProduct.id}>
+              <Card 
+                onMouseEnter={() => setHoveredCard(relatedProduct.id)}
+                onMouseLeave={() => setHoveredCard(null)}
+                sx={{ position: 'relative', transition: 'transform 0.2s', '&:hover': { transform: 'scale(1.02)' } }}
+              >
+                <CardContent>
+                  <Box display="flex" justifyContent="center">
+                    <img 
+                      src={relatedProduct.imageUrl} 
+                      alt={relatedProduct.title} 
+                      style={{ width: '100%', height: 'auto', maxHeight: '150px', objectFit: 'contain' }} 
+                    />
+                  </Box>
+                  <Typography variant="h6" style={{ color: 'deeppink', padding: '10px 0' }}>
+                    {relatedProduct.title}
+                  </Typography>
+                  <Typography variant="body1" color="textSecondary">
+                    Preço: {relatedProduct.price}
+                  </Typography>
+                  {hoveredCard === relatedProduct.id && (
+                    <Box mt={2}>
+                      <AddToCartButton 
+                        item={{ ...relatedProduct, id: relatedProduct.id }} 
+                        quantity={1}
+                      />
+                    </Box>
+                  )}
+                </CardContent>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+      </Box>
     </Box>
   );
 };

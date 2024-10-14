@@ -74,7 +74,10 @@ const Catalog: React.FC = () => {
 
   return (
     <Box p={1}>
-      <Typography variant="h3" align="center" sx={{ mt: 4, mb: 4 }}>
+      <Typography variant="h3" align="center" sx={{  mt: 4, 
+    mb: 4, 
+    color: 'deepPink', 
+    textTransform: 'uppercase' }}>
         Produtos selecionados para Você
       </Typography>
 
