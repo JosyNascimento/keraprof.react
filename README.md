@@ -1,46 +1,51 @@
-# Getting Started with Create React App
+# Keraprof - Produtos de Beleza e Cuidados Pessoais
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+**Keraprof** é uma plataforma de e-commerce voltada para profissionais e entusiastas de beleza, oferecendo uma seleção de produtos de alta qualidade para hairstylists, esteticistas e amantes da beleza.
 
-## Available Scripts
+## Índice
 
-In the project directory, you can run:
+- [Começando](#começando)
+- [Scripts Disponíveis](#scripts-disponíveis)
+- [Contribuição](#contribuição)
+- [Acesse o Repositório](#acesse-o-repositório)
+- [Licença](#licença)
 
-### `npm start`
+## Começando
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Este projeto foi iniciado com [Create React App](https://github.com/JosyNascimento/keraprof.react). Para começar, verifique se você tem o [Node.js](https://nodejs.org/) e o [npm](https://www.npmjs.com/) instalados.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+### Scripts Disponíveis
 
-### `npm test`
+No diretório do projeto, você pode executar:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- **`npm start`**: Executa o aplicativo em modo de desenvolvimento. Acesse em [http://localhost:3000](http://localhost:3000).
+- **`npm test`**: Inicia o executor de testes no modo interativo.
+- **`npm run build`**: Compila o aplicativo para produção na pasta `build`.
+- **`npm run eject`**: Remove a única dependência de construção, permitindo total controle sobre a configuração (irreversível).
 
-### `npm run build`
+## Contribuição
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Contribuições são bem-vindas! Para contribuir com o projeto, siga estas etapas:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+1. Faça um fork do projeto.
+2. Crie sua feature branch (`git checkout -b feature/nome-da-sua-feature`).
+3. Faça commit das suas alterações (`git commit -m 'Adicionando uma nova feature'`).
+4. Faça push para a branch (`git push origin feature/nome-da-sua-feature`).
+5. Abra um Pull Request.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Contribuições Básicas
 
-### `npm run eject`
+Se você gostaria de contribuir, aqui estão algumas formas comuns de fazê-lo:
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+- **Relatar Bugs**: Se você encontrar um bug, abra um problema (issue) detalhando o que aconteceu.
+- **Adicionar Funcionalidades**: Se você tem uma ideia para uma nova funcionalidade, sinta-se à vontade para implementá-la e enviar um Pull Request.
+- **Documentação**: Ajude a melhorar a documentação do projeto.
+- **Revisão de Código**: Se você não tem certeza sobre uma implementação, revisões são sempre bem-vindas!
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Acesse o Repositório
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+Código-fonte disponível em: [Keraprof - GitHub Repository](https://github.com/JosyNascimento/keraprof.react).
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+## Licença
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+Este projeto está licenciado sob a MIT License. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.

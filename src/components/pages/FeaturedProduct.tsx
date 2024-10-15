@@ -14,6 +14,7 @@ import { fetchProductById, Product } from '../../services/productService';
 import AddToCartButton from '../Cart/AddToCartButton';
 import { getFirestore, collection, getDocs, doc, getDoc } from 'firebase/firestore';
 import CardComponent from '../Card/CardComponent';
+import OffersSection from '../pages/OffersSection'; 
 
 const calculateFreight = (cep: string) => {
   const freightRates: { [key: string]: number } = {
@@ -239,30 +240,10 @@ const FeaturedProduct: React.FC = () => {
         </Grid>
       </Grid>
 
-      <Box mt={5}>
-        <Typography variant="h5" style={{ color: 'deeppink', paddingBottom: '16px' }}>
-          Clientes Também Compraram
-        </Typography>
-        {relatedProducts.length > 0 ? (
-          <Grid container spacing={3}>
-            {relatedProducts.map((relatedProduct) => (
-              <Grid item xs={12} sm={6} md={4} key={relatedProduct.id}>
-                <CardComponent
-                  id={relatedProduct.id}
-                  title={relatedProduct.title}
-                  subtitle={relatedProduct.subtitle}
-                  imgSrc={relatedProduct.imageUrl}
-                  price={relatedProduct.price} 
-                />
-              </Grid>
-            ))}
+   
 
-            
-          </Grid>
-        ) : (
-          <Typography variant="h6">Nenhum produto relacionado encontrado.</Typography>
-        )}
-      </Box>
+      {/* Adicionando a seção de ofertas aqui */}
+      <OffersSection />
     </Box>
   );
 };

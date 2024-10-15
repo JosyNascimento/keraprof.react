@@ -18,6 +18,8 @@ import PaymentPage from './components/pages/PaymentPage';
 import PaymentConfirmation from './components/pages/PaymentConfirmation';
 import MyOrdersPage from './components/pages/MyOrdersPage';
 import OffersSection from './components/pages/OffersSection';
+import BestOffers from './components/pages/BestOffers';
+
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 
 root.render(
@@ -38,6 +40,7 @@ root.render(
               <Route path="/payment-confirmation" element={<PaymentConfirmation/>} />
               <Route path="/my-orders" element={<MyOrdersPage />} />
               <Route path="/OferSection:/id" element = {<OffersSection/>} />
+              <Route path="/bestoffers/:id" element={<BestOffers />} />
             </Routes>
           </div>
         </div>

@@ -13,8 +13,6 @@ import { ArrowBack } from '@mui/icons-material';
 import { db } from '../../firebase';
 import { collection, getDocs } from 'firebase/firestore';
 import AddToCartButton from '../Cart/AddToCartButton';
-import CardComponent from '../Card/CardComponent'; // Importando o CardComponent
-import OffersSection from '../pages/OffersSection'; // Importando a seção de ofertas
 
 // Definição das interfaces
 interface Item {
@@ -43,12 +41,12 @@ const calculateFreight = (cep: string) => {
     'ES': 18.00,
     'outros': 30.00,
   };
-  
+
   const state = cep.slice(0, 2);
   return freightRates[state] || freightRates['outros'];
 };
 
-const ProductDetailPage: React.FC = () => {
+const BestOffers: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const [product, setProduct] = useState<Item | null>(null);
@@ -56,7 +54,6 @@ const ProductDetailPage: React.FC = () => {
   const [cep, setCep] = useState('');
   const [freight, setFreight] = useState<number | null>(null);
   const [selectedImage, setSelectedImage] = useState('');
-  const [relatedProducts, setRelatedProducts] = useState<Item[]>([]); // Estado para produtos relacionados
 
   useEffect(() => {
     const loadProduct = async () => {
@@ -65,32 +62,26 @@ const ProductDetailPage: React.FC = () => {
         const categoriesSnap = await getDocs(categoriesRef);
         const categories = categoriesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() })) as Category[];
 
+        console.log("Categorias carregadas:", categories); // Log das categorias
+
         const foundProduct = categories.flatMap(category => 
           category.items?.filter((item: Item) => item.id === id) || []
         )[0];
 
+        console.log("Produto encontrado:", foundProduct); // Log do produto encontrado
+
         if (foundProduct) {
-          const imageUrls = foundProduct.imageUrls || [];
-          setProduct({ ...foundProduct, imageUrls });
-          setSelectedImage(foundProduct.imageUrl);
-        } else {
-          console.error("Produto não encontrado!");
-        }
+            const imageUrls = foundProduct.imageUrls || [];
+            setProduct({ ...foundProduct, imageUrls });
+            setSelectedImage(foundProduct.imageUrl);
+          } else {
+            console.error("Produto não encontrado!");
+          }
+          
       }
     };
 
-    const fetchRelatedProducts = async () => {
-      const categoriesRef = collection(db, "categories");
-      const categoriesSnap = await getDocs(categoriesRef);
-      const categories = categoriesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() })) as Category[];
-      const allProducts = categories.flatMap(category => category.items) as Item[];
-
-      const related = allProducts.filter((item) => item.id !== id).slice(0, 6); // Excluir o produto atual e limitar a 6 produtos
-      setRelatedProducts(related);
-    };
-
     loadProduct();
-    fetchRelatedProducts();
   }, [id]);
 
   const handleAdd = () => setQuantity(quantity + 1);
@@ -245,11 +236,8 @@ const ProductDetailPage: React.FC = () => {
           </Card>
         </Grid>
       </Grid>
-
-      {/* Adicionando a seção de ofertas ao final da página */}
-      <OffersSection />
     </Box>
   );
 };
 
-export default ProductDetailPage;
+export default BestOffers;
