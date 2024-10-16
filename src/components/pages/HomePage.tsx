@@ -25,6 +25,7 @@ const HomePage: React.FC = () => {
 
   return (
     <div>
+      {/* Slider Section */}
       <div style={{ width: '100vw', marginBottom: '2rem', overflow: 'hidden' }}>
         <Slider {...settings}>
           <div>
@@ -54,17 +55,23 @@ const HomePage: React.FC = () => {
         </Slider>
       </div>
 
+      {/* Info Boxes Section */}
       <div className="line-content">
         <div className="container">
-          <Box display="flex" justifyContent="space-between" alignItems="center" flexWrap="wrap">
-            {/* Primeir ao Quarto Bloco */}
+          <Box 
+            display="flex" 
+            justifyContent="space-between" 
+            alignItems="center" 
+            flexWrap="wrap"
+          >
+            {/* Info Box Items */}
             {[ 
               { img: caixaImg, title: 'Os melhores produtos', subtitle: 'Você encontra aqui!' },
               { img: cartaoImg, title: 'Parcele com cartão', subtitle: 'Pague em até 10x' },
               { img: caminhaoImg, title: 'Entrega rápida', subtitle: 'em todo o Brasil' },
               { img: qualidadeImg, title: 'Satisfação garantida', subtitle: 'ou seu dinheiro de volta' },
             ].map((item, index) => (
-              <div key={index} className="box-content flex" style={{ display: 'flex', alignItems: 'center', padding: '1rem' }}>
+              <div key={index} className="box-content flex" style={{ flex: '1 1 20%', margin: '0.5rem', display: 'flex', alignItems: 'center', padding: '1rem' }}>
                 <div className="box-img" style={{ padding: '0.5rem', borderRadius: '8px' }}>
                   <img src={item.img} alt={item.title} style={{ width: '48px', height: '48px', margin: '1rem' }} />
                 </div>
@@ -78,11 +85,12 @@ const HomePage: React.FC = () => {
         </div>
       </div>
 
+      {/* Catalog Section */}
       <Container>
         <Catalog />
       </Container>
 
-      {/* Seção de Ofertas ao final da página */}
+      {/* Offers Section */}
       <OffersSection />
     </div>
   );

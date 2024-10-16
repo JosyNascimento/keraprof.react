@@ -12,7 +12,6 @@ import { db } from '../../firebase';
 import { collection, getDocs } from 'firebase/firestore';
 import { Product } from '../../services/productService'; 
 
-// Interfaces
 interface Item {
   id: string;
   title: string;
@@ -25,7 +24,7 @@ interface Category {
 }
 
 const NavBar = () => {
-  const isMobile = useMediaQuery("(max-width:600px)");
+  const isMobile = useMediaQuery("(max-width:675px)"); // Alterado para 675px
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [cartDrawerOpen, setCartDrawerOpen] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -58,6 +57,7 @@ const NavBar = () => {
 
   const handleSubCategoryClick = (id: string) => {
     navigate(`/product/${id}`);
+    setDrawerOpen(false); // Fechar o drawer após a navegação
   };
 
   const handleSearchResults = (results: Product[]) => {
@@ -118,11 +118,12 @@ const NavBar = () => {
         </Toolbar>
       </AppBar>
 
+      {/* Drawer para o menu de hambúrguer */}
       <Drawer
         anchor="right"
         open={drawerOpen}
         onClose={toggleDrawer(false)}
-        sx={{ "& .MuiDrawer-paper": { width: "250px" } }} // Ajuste a largura se necessário
+        sx={{ "& .MuiDrawer-paper": { width: "250px" } }}
       >
         <Box sx={{ display: "flex", flexDirection: "column", padding: 2 }}>
           <SearchBar
@@ -159,7 +160,7 @@ const NavBar = () => {
           color: "white",
           backgroundColor: "#B5A642",
           padding: 1,
-          flexDirection: { xs: "column", md: "row" }, // Alterando a direção com base no tamanho da tela
+          flexDirection: { xs: "column", md: "row" },
         }}
       >
         <Box sx={{ display: "flex", alignItems: "center", marginBottom: { xs: 1, md: 0 }, marginRight: { xs: 0, md: 2 } }}>
@@ -172,15 +173,15 @@ const NavBar = () => {
 
         <Box
           sx={{
-            display: "flex",
+            display: isMobile ? 'none' : 'flex', // Ocultar em telas móveis
             color: "white",
             justifyContent: "center",
             backgroundColor: "#B5A642",
             padding: 1,
-            flexWrap: "wrap", // Permitir quebra de linha em telas pequenas
+            flexWrap: "wrap",
           }}
         >
-          {!isMobile && categories.map((category) => (
+          {categories.map((category) => (
             <MenuItem
               key={category.id}
               title={category.title}
