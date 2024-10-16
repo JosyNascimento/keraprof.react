@@ -1,7 +1,7 @@
 import React, { useState, useEffect, ChangeEvent, KeyboardEvent } from 'react';
 import SearchIcon from '@mui/icons-material/Search';
-import PersonIcon from '@mui/icons-material/Person';
 import { styled } from '@mui/material/styles';
+import { useNavigate } from 'react-router-dom'; // Importando useNavigate para redirecionamento
 import { searchProducts, Product } from '../../services/productService';
 
 // Estilização dos componentes
@@ -44,19 +44,6 @@ const SearchIconWrapper = styled('div')(({ theme }) => ({
   cursor: 'pointer',
 }));
 
-const LoginWrapper = styled('div')(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'center',
-  marginLeft: '16px',
-  color: '#fff',
-  fontSize: '16px',
-  position: 'relative',
-}));
-
-const PersonIconWrapper = styled(PersonIcon)(({ theme }) => ({
-  color: '#fff',
-}));
-
 const SuggestionsList = styled('ul')(({ theme }) => ({
   position: 'absolute',
   top: '100%',
@@ -84,58 +71,14 @@ const SuggestionItem = styled('li')<{ selected?: boolean }>(({ selected }) => ({
   },
 }));
 
-const LoadingIndicator = styled('div')(({ theme }) => ({
-  marginLeft: '8px',
-}));
-
 const NoResults = styled('div')(({ theme }) => ({
   marginLeft: '8px',
   color: '#f00',
 }));
 
-const LoginPopup = styled('div')(({ theme }) => ({
-  position: 'absolute',
-  top: '100%',
-  left: 0,
-  right: 0,
-  backgroundColor: '#fff',
-  border: '1px solid #ccc',
-  borderRadius: '4px',
-  boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
-  zIndex: 100,
-  padding: '10px',
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'flex-start',
-}));
-
-const AccountMessage = styled('div')(({ theme }) => ({
-  marginBottom: '8px',
-  fontSize: '14px',
-  color: '#333',
-}));
-
-const ButtonContainer = styled('div')(({ theme }) => ({
-  display: 'flex',
-  justifyContent: 'space-between',
-  width: '100%', // Faz os botões ocuparem o espaço total
-}));
-
-const Button = styled('a')<{ outlined?: boolean }>(({ theme, outlined }) => ({
-  flex: 1, // Faz os botões terem o mesmo tamanho
-  marginTop: '8px',
-  padding: '10px 16px',
-  backgroundColor: outlined ? 'transparent' : 'deeppink',
-  color: outlined ? 'deeppink' : '#fff',
-  textDecoration: 'none',
-  borderRadius: '4px',
-  border: outlined ? '2px solid deeppink' : 'none',
-  transition: 'background-color 0.3s, color 0.3s',
-  '&:hover': {
-    backgroundColor: outlined ? 'deeppink' : '#d85e95',
-    color: outlined ? '#fff' : '#fff',
-  },
-  marginLeft: outlined ? '8px' : '0', // Espaçamento entre os botões
+const LoadingIndicator = styled('div')(({ theme }) => ({
+  marginLeft: '8px',
+  color: '#aaa',
 }));
 
 interface SearchBarProps {
@@ -149,20 +92,31 @@ const SearchBar: React.FC<SearchBarProps> = ({ isMobile, onSearchResults }) => {
   const [noResults, setNoResults] = useState(false);
   const [suggestions, setSuggestions] = useState<Product[]>([]);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
-  const [showLoginPopup, setShowLoginPopup] = useState(false);
+  const navigate = useNavigate(); // Inicializa o useNavigate
 
   const fetchResults = async () => {
     setLoading(true);
     setNoResults(false);
 
     try {
+      console.log('Buscando por:', query);
       const results = await searchProducts(query);
-      if (results.length === 0) {
+      console.log('Resultados encontrados:', results);
+
+      // Evita duplicatas usando um objeto para rastrear títulos únicos
+      const uniqueResultsMap = results.reduce((acc, product) => {
+        acc[product.title] = product; // Chave é o título do produto
+        return acc;
+      }, {} as Record<string, Product>);
+
+      const uniqueResults = Object.values(uniqueResultsMap); // Converte de volta para array
+
+      if (uniqueResults.length === 0) {
         setNoResults(true);
       } else {
-        setSuggestions(results);
+        setSuggestions(uniqueResults);
       }
-      onSearchResults(results);
+      onSearchResults(uniqueResults);
     } catch (error) {
       console.error('Erro ao buscar produtos:', error);
       onSearchResults([]);
@@ -179,7 +133,11 @@ const SearchBar: React.FC<SearchBarProps> = ({ isMobile, onSearchResults }) => {
       return;
     }
 
-    fetchResults();
+    const debounceFetchResults = setTimeout(() => {
+      fetchResults();
+    }, 300);
+
+    return () => clearTimeout(debounceFetchResults);
   }, [query, onSearchResults]);
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -188,14 +146,9 @@ const SearchBar: React.FC<SearchBarProps> = ({ isMobile, onSearchResults }) => {
 
   const handleSearchClick = () => {
     if (query.length > 0) {
-      fetchResults();
+      // Redireciona para a página de resultados de pesquisa
+      navigate(`/search?query=${encodeURIComponent(query)}`);
     }
-  };
-
-  const handleSuggestionClick = (product: Product) => {
-    setQuery(product.title);
-    setSuggestions([]);
-    fetchResults();
   };
 
   const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
@@ -206,11 +159,18 @@ const SearchBar: React.FC<SearchBarProps> = ({ isMobile, onSearchResults }) => {
       setSelectedIndex((prev) => (prev === null ? suggestions.length - 1 : Math.max(0, (prev - 1) % suggestions.length)));
       event.preventDefault();
     } else if (event.key === 'Enter') {
-      if (selectedIndex !== null) {
+      if (selectedIndex !== null && suggestions[selectedIndex]) {
         handleSuggestionClick(suggestions[selectedIndex]);
       }
       event.preventDefault();
     }
+  };
+
+  const handleSuggestionClick = (product: Product) => {
+    setQuery(product.title);
+    setSuggestions([]);
+    // Redireciona para a página de detalhes do produto
+    navigate(`/product/${product.id}`);
   };
 
   return (
@@ -226,44 +186,22 @@ const SearchBar: React.FC<SearchBarProps> = ({ isMobile, onSearchResults }) => {
         <SearchIconWrapper onClick={handleSearchClick}>
           <SearchIcon />
         </SearchIconWrapper>
-        {loading && <LoadingIndicator>Loading...</LoadingIndicator>}
+    
         {noResults && <NoResults>Nenhum resultado encontrado</NoResults>}
         {suggestions.length > 0 && (
           <SuggestionsList>
             {suggestions.map((product, index) => (
               <SuggestionItem
-                key={product.id} 
+                key={product.id}
                 selected={index === selectedIndex}
                 onClick={() => handleSuggestionClick(product)}
               >
-                {product.title} 
+                {product.title}
               </SuggestionItem>
             ))}
           </SuggestionsList>
         )}
       </SearchWrapper>
-      <LoginWrapper
-        onMouseEnter={() => setShowLoginPopup(true)}
-        onMouseLeave={() => setShowLoginPopup(false)}
-      >
-        <PersonIconWrapper />
-        <a href="/login" style={{ marginLeft: '8px', color: '#fff', textDecoration: 'none' }}>
-          Olá, faça seu login ou cadastre-se
-        </a>
-        {showLoginPopup && (
-          <LoginPopup>
-            <AccountMessage>
-              Para ver seus pedidos e ter uma experiência personalizada, acesse sua conta :)
-            </AccountMessage>
-            <ButtonContainer>
-              <Button href="/login">Login</Button>
-              <Button href="/register" outlined>
-                Cadastrar
-              </Button>
-            </ButtonContainer>
-          </LoginPopup>
-        )}
-      </LoginWrapper>
     </SearchContainer>
   );
 };
